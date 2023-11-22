@@ -1,0 +1,18 @@
+// Comments on the Tables and the models.
+
+The Location Has X and Y parameters x and y (2).(6).
+
+Journey has SPoint, DPoint and set of StopsPoints, Name (From SPoint to DPoint), and set of BusID, set of Times.(Pair<Bus, Time>)
+
+Point has PointName, xPointer, yPointer (Location), PointID.
+
+
+// Implementation Comments.
+
+In the search we can send all data to the application and then search on them.
+
+Journey Planner
+SPoint, DPoint, Time (approximately)
+
+//Notes
+

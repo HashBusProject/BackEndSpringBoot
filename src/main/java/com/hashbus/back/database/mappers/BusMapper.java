@@ -1,0 +1,28 @@
+package com.hashbus.back.database.mappers;
+
+import com.hashbus.back.database.data.access.UserDAO;
+import com.hashbus.back.model.Bus;
+
+import com.hashbus.back.model.User;
+import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@Component
+@AllArgsConstructor
+public class BusMapper implements RowMapper<Bus> {
+    private final UserDAO userDAO;
+
+    @Override
+    public Bus mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Bus bus = new Bus();
+        bus.setId(rs.getLong("bus_ID"));
+        bus.setWorking(rs.getBoolean("working"));
+        User driver = userDAO.getUserById(rs.getLong("user_ID"));
+        bus.setDriver(driver);
+        return bus;
+    }
+}
