@@ -22,9 +22,9 @@ public class PointMapper implements RowMapper<Point> {
     @Override
     public Point mapRow(ResultSet rs, int rowNum) throws SQLException {
         Point point = new Point();
-        point.setId(rs.getLong("id"));
-        point.setX(rs.getLong("x"));
-        point.setX(rs.getLong("y"));
+        point.setId(rs.getInt("point_ID"));
+        point.setX(rs.getFloat("x_point"));
+        point.setX(rs.getFloat("y_point"));
         point.setJourneys(
             pointDAO.getAllJourneysById(point.getId())
         );

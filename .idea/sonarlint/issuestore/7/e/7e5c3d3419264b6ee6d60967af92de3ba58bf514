@@ -1,0 +1,7 @@
+
+o	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ùĞ°Æ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(½œ°×úÿÿÿÿ
+o	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ÓÌ€
+]	java:S125"<This block of commented-out lines of code should be removed.(î¬õŠÿÿÿÿÿ8â…ÆÄ¿1
+l
+java:S1128"ORemove this unused import 'org.springframework.beans.factory.annotation.Value'.(ìø›8î©ÆÄ¿1

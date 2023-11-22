@@ -1,13 +1,13 @@
 package com.hashbus.back.service;
 
-import com.hashbus.back.database.data.access.JourneyDAO;
-import com.hashbus.back.database.data.access.ScheduleDAO;
-import com.hashbus.back.database.data.access.TicketDAO;
-import com.hashbus.back.database.data.access.UserDAO;
+import com.hashbus.back.database.data.access.*;
+import com.hashbus.back.model.Point;
 import com.hashbus.back.model.User;
 import com.hashbus.back.exceptions.LoginException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -17,6 +17,7 @@ public class UserService {
     private JourneyDAO journeyDAO;
     private ScheduleDAO scheduleDAO;
     private TicketDAO ticketDAO;
+    private PointDAO pointDAO;
 
     public User login(User user) throws LoginException {
         User user1 = userDAO.getUserByUsername(user.getUsername());
@@ -26,5 +27,8 @@ public class UserService {
             throw new LoginException("Wrong Login!!");
         }
         return user1;
+    }
+    public List<Point> getAllPoint() {
+        return pointDAO.getAllPoint();
     }
 }

@@ -10,8 +10,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 public class ApplicationConfiguration {
     private static final String driverClassName = "com.mysql.jdbc.Driver";
-    @Value("${url}")
-    private static final String URL = "jdbc:mysql://google/hashbus?cloudSqlInstance=model-arcadia-405711:us-central1:hashbus-db&socketFactory=com.google.cloud.sql.mysql.SocketFactory";
+//    @Value("${url}")
+//    private static final String URL = "jdbc:mysql://google/hashbus?cloudSqlInstance=model-arcadia-405711:us-central1:hashbus-db&socketFactory=com.google.cloud.sql.mysql.SocketFactory";
+    private static final String URL = "jdbc:mysql://34.71.88.149/hashbus";
     private static final String dbUsername = "root";
     private static final String dbPassword = "deya@12@";
     @Bean

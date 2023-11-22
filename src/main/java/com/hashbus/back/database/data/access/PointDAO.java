@@ -31,7 +31,7 @@ public class PointDAO {
         ) > 0;
     }
     public List<Point> getAllPoint(){
-        return jdbcTemplate.query("select * form points ", pointMapper);
+        return jdbcTemplate.query("select * from points ", pointMapper);
 
     }
     public boolean deletePoint(Point point) {

@@ -19,8 +19,8 @@ CREATE TABLE points
 (
     point_ID   INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     point_name varchar(50)        NOT NULL,
-    x_point    FLOAT(6, 6),
-    y_point    FLOAT(6, 6)
+    x_point    FLOAT,
+    y_point    FLOAT
 );
 CREATE TABLE journeys
 (
