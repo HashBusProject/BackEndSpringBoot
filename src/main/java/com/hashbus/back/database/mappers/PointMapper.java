@@ -26,7 +26,7 @@ public class PointMapper implements RowMapper<Point> {
         point.setX(rs.getFloat("x_point"));
         point.setX(rs.getFloat("y_point"));
         point.setJourneys(
-            pointDAO.getAllJourneysById(point.getId())
+                pointDAO.getAllJourneysById(point.getId())
         );
         point.setPointName(rs.getString("point_name"));
         return point;
