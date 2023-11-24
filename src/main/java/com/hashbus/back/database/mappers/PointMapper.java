@@ -28,10 +28,6 @@ public class PointMapper implements RowMapper<Point> {
     public Point mapRow(ResultSet rs, int rowNum) throws SQLException {
         Point point = new Point();
         ResultSetMetaData rsmd = rs.getMetaData();
-//        System.out.println(rsmd.getColumnName(1));
-//        System.out.println(rsmd.getColumnName(2));
-//        System.out.println(rsmd.getColumnName(3));
-//        System.out.println(rsmd.getColumnName(4));
         point.setId(rs.getInt("point_ID"));
         point.setX(rs.getDouble("x_point"));
         point.setY(rs.getDouble("y_point"));
