@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 @Data
 public class User {
-    private long id;
+    private Integer userID;
     private String username;
     private String email;
     private String name;

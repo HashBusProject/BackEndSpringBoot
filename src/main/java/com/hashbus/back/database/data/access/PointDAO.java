@@ -31,10 +31,12 @@ public class PointDAO {
                 point.getPointName()
         ) > 0;
     }
-    public List<Point> getAllPoint(){
+
+    public List<Point> getAllPoint() {
         return jdbcTemplate.query("select * form points ", pointMapper);
 
     }
+
     public boolean deletePoint(Point point) {
         return jdbcTemplate.update("delete from points where point_ID =  ? ",
                 point.getId()
@@ -42,7 +44,7 @@ public class PointDAO {
     }
 
 
-    public Set<Journey> getAllJourneysById(long journeyId) {
+    public Set<Integer> getAllJourneysById(Integer journeyId) {
         return new HashSet<>(
                 jdbcTemplate.query(
                         "SELECT stop_points_for_journey.journey_ID\n" +
@@ -53,7 +55,7 @@ public class PointDAO {
                                 "FROM journeys\n" +
                                 "WHERE journeys.source_point_ID=?;"
                         , new Object[]{journeyId, journeyId},
-                        journeyMapper
+                        ((rs, rowNum) -> rs.getInt(1))
                 )
         );
     }

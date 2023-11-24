@@ -37,7 +37,7 @@ public class BusDAO {
     public boolean updateBus(Bus bus){
         return jdbcTemplate.update("update buses set working = ?, driver_ID = ? where id = ?",
                 bus.getId(),
-                bus.getDriver().getId(),
+                bus.getDriver().getUserID(),
                 bus.isWorking()
         ) > 0;
     }

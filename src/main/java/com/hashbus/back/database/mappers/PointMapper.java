@@ -4,6 +4,7 @@ import com.hashbus.back.database.data.access.PointDAO;
 import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +18,6 @@ import java.util.HashSet;
 @Component
 public class PointMapper implements RowMapper<Point> {
     private final PointDAO pointDAO;
-    private int count = 0;
 
     @Autowired
     public PointMapper(@Lazy PointDAO pointDAO) {
@@ -31,13 +31,10 @@ public class PointMapper implements RowMapper<Point> {
         point.setId(rs.getInt("point_ID"));
         point.setX(rs.getDouble("x_point"));
         point.setY(rs.getDouble("y_point"));
-        if (count++ > 0) {
-
-        } else
-            point.setJourneys(
-                    (HashSet<Journey>) pointDAO.getAllJourneysById(point.getId())
-            );
         point.setPointName(rs.getString("point_name"));
+        point.setJourneysID(
+                (HashSet<Integer>) pointDAO.getAllJourneysById(point.getId())
+        );
         return point;
     }
 }

@@ -49,12 +49,12 @@ public class JourneyDAO {
         return jdbcTemplate.queryForObject("select * from points where point_ID = (select journeys.destination_point_ID from journeys where journey_ID = ?)", new Object[]{journeyId}, pointMapper);
     }
 
-    public HashSet<Point> getStopPointsForJourneyById(long journeyId) {
-        List<Point> actors = jdbcTemplate.query(
+    public HashSet<Integer> getStopPointsForJourneyById(Integer journeyId) {
+        List<Integer> actors = jdbcTemplate.query(
                 // TODO Check this
                 "select * from points where point_ID = (select  from stop_points_for_journey where journey_ID = ?)",
                 new Object[]{journeyId},
-                pointMapper
+                (rs, num) -> rs.getInt("point_ID")
         );
         return new HashSet<>(actors);
     }

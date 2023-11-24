@@ -11,8 +11,8 @@ import java.util.HashSet;
 @NoArgsConstructor
 public class Bus {
     private User driver;
-    private long id;
-    private int cap;
+    private Integer id;
+    private Integer cap;
     private HashSet<Schedule> schedules;
 //    private int
     private boolean isWorking;

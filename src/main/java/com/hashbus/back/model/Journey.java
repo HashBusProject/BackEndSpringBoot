@@ -1,5 +1,6 @@
 package com.hashbus.back.model;
 
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,6 @@ public class Journey {
     private String name;
     private Point sourcePoint;
     private Point destinationPoint;
-    private HashSet<Point> stopPoints;
+    private HashSet<Integer> stopPoints;
     private HashSet<Schedule> journeys;
 }
