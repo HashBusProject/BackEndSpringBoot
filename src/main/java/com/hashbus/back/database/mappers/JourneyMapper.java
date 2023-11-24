@@ -25,9 +25,9 @@ public class JourneyMapper implements RowMapper<Journey> {
     @Override
     public Journey mapRow(ResultSet rs, int rowNum) throws SQLException {
         Journey journey = new Journey();
-        journey.setId(rs.getLong("journey_ID"));
+        journey.setId(rs.getInt("journey_ID"));
         journey.setSourcePoint(
-                journeyDAO.getSourcePointForJourneyById(journey.getId())
+                journeyDAO.getSourcePointForJourneyById( journey.getId())
         );
         journey.setDestinationPoint(
                 journeyDAO.getDestinationPointForJourneyById(journey.getId())

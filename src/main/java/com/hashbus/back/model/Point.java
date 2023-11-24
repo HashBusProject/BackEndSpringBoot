@@ -6,15 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.Locale;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Point {
-    private Long id;
+    private Integer id;
     private String pointName;
-    private double x;
-    private double y;
+    private Double x;
+    private Double y;
     private HashSet<Journey> journeys;
 }

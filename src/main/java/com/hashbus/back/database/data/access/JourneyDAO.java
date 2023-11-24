@@ -41,18 +41,18 @@ public class JourneyDAO {
         ) > 0;
     }
 
-    public Point getSourcePointForJourneyById(long journeyId) {
-        return jdbcTemplate.queryForObject("select source_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, pointMapper);
+    public Point getSourcePointForJourneyById(Integer journeyId) {
+        return jdbcTemplate.queryForObject("select * from points where point_ID = (select journeys.source_point_ID from journeys where journey_ID = ?)", new Object[]{journeyId}, pointMapper);
     }
 
     public Point getDestinationPointForJourneyById(long journeyId) {
-        return jdbcTemplate.queryForObject("select destination_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, pointMapper);
+        return jdbcTemplate.queryForObject("select * from points where point_ID = (select journeys.destination_point_ID from journeys where journey_ID = ?)", new Object[]{journeyId}, pointMapper);
     }
 
     public HashSet<Point> getStopPointsForJourneyById(long journeyId) {
         List<Point> actors = jdbcTemplate.query(
                 // TODO Check this
-                "select * from stop_points_for_journey where journey_ID = ?",
+                "select * from points where point_ID = (select  from stop_points_for_journey where journey_ID = ?)",
                 new Object[]{journeyId},
                 pointMapper
         );

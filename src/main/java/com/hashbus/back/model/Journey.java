@@ -10,7 +10,7 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Journey {
-    private long id;
+    private Integer id;
     private String name;
     private Point sourcePoint;
     private Point destinationPoint;

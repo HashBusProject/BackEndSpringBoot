@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
+import java.util.Set;
 
 @AllArgsConstructor
 @Repository
@@ -19,8 +19,8 @@ public class PointDAO {
     private JourneyMapper journeyMapper;
     private PointMapper pointMapper;
 
-    public Point getPointById(Long id) {
-        return jdbcTemplate.queryForObject("select * from points where point_id = ?", new Object[]{id}, pointMapper);
+    public Point getPointById(Integer id) {
+        return jdbcTemplate.queryForObject("select * from points where point_ID = ?", new Object[]{id}, pointMapper);
     }
 
     public boolean insertPoint(Point point) {
@@ -32,7 +32,7 @@ public class PointDAO {
         ) > 0;
     }
     public List<Point> getAllPoint(){
-        return jdbcTemplate.query("select * from points ", pointMapper);
+        return jdbcTemplate.query("select * form points ", pointMapper);
 
     }
     public boolean deletePoint(Point point) {
@@ -42,7 +42,7 @@ public class PointDAO {
     }
 
 
-    public HashSet<Journey> getAllJourneysById(long journeyId) {
+    public Set<Journey> getAllJourneysById(long journeyId) {
         return new HashSet<>(
                 jdbcTemplate.query(
                         "SELECT stop_points_for_journey.journey_ID\n" +

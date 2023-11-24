@@ -16,7 +16,7 @@ public class ScheduleDAO {
 
     public HashSet<Schedule> getSchedulesByJourneyId(long journeyId) {
         return new HashSet<>(jdbcTemplate.query(
-                "select * from schedules where journey_ID=?",
+                "select * from schedules where journey_ID = ?",
                 new Object[]{journeyId},
                 scheduleMapper
         ));
