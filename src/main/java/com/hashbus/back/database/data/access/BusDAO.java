@@ -28,9 +28,9 @@ public class BusDAO {
         ) > 0;
     }
 
-    public boolean deleteBus(Bus bus) {
+    public boolean deleteBus(long id) {
         return jdbcTemplate.update("delete from buses where bus_id = ?  ",
-                bus.getId()
+                id
         ) > 0;
     }
 

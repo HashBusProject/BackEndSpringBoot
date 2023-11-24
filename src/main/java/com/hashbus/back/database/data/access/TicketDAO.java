@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public class TicketDAO {
     JdbcTemplate jdbcTemplate ;
 //    public Ticket getTicketById(long ticket_id) {
-////        return jdbcTemplate.queryForObject("select * form ticket where ticket_id = ?  " , new Object [] {ticket_id} , new TicketMapper()) ;
+////        return jdbcTemplate.queryForObject("select * from ticket where ticket_id = ?  " , new Object [] {ticket_id} , new TicketMapper()) ;
 //    }
 //    public boolean insertTicket(){
 //

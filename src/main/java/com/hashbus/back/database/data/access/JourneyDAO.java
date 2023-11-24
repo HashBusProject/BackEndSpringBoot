@@ -21,7 +21,7 @@ public class JourneyDAO {
 
     private PointMapper pointMapper;
     public Journey getJourney(long id) {
-        return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?)", new Object[]{id}, journeyMapper);
+        return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?", new Object[]{id}, journeyMapper);
     }
     public Journey getAllJourney(){
         return jdbcTemplate.queryForObject("select * from journeys )", journeyMapper);
@@ -36,7 +36,7 @@ public class JourneyDAO {
     }
 
     public boolean deleteJourney(Journey journey) {
-        return jdbcTemplate.update("delete form journeys where journey_ID = ? ",
+        return jdbcTemplate.update("delete from journeys where journey_ID = ? ",
                 journey.getId()
         ) > 0;
     }

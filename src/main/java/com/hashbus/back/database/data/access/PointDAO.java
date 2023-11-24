@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 @AllArgsConstructor
 @Repository
@@ -18,8 +19,8 @@ public class PointDAO {
     private JourneyMapper journeyMapper;
     private PointMapper pointMapper;
 
-    public Point getPointById(long id) {
-        return jdbcTemplate.queryForObject("select * form points where point_ID = ?", new Object[]{id}, pointMapper);
+    public Point getPointById(Long id) {
+        return jdbcTemplate.queryForObject("select * from points where point_id = ?", new Object[]{id}, pointMapper);
     }
 
     public boolean insertPoint(Point point) {
