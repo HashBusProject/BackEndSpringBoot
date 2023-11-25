@@ -27,8 +27,7 @@ public class JourneyDAO {
         return jdbcTemplate.queryForObject("select * from journeys )", journeyMapper);
     }
     public boolean insertJourney(Journey journey) {
-        return jdbcTemplate.update("insert into journeys (journey_ID ,  source_point_ID , destination_point_ID , journey_name) values ( ? , ?  , ? , ?  )",
-                journey.getId(),
+        return jdbcTemplate.update("insert into journeys (source_point_ID , destination_point_ID , journey_name) values ( ?  , ? , ?  )",
                 journey.getSourcePoint().getId(),
                 journey.getDestinationPoint().getId(),
                 journey.getName()
@@ -52,7 +51,10 @@ public class JourneyDAO {
     public HashSet<Integer> getStopPointsForJourneyById(Integer journeyId) {
         List<Integer> actors = jdbcTemplate.query(
                 // TODO Check this
-                "select * from points where point_ID = (select  from stop_points_for_journey where journey_ID = ?)",
+                "SELECT points.*\n" +
+                        "FROM points\n" +
+                        "JOIN stop_points_for_journey ON points.point_ID = stop_points_for_journey.point_ID\n" +
+                        "WHERE stop_points_for_journey.journey_ID = ?",
                 new Object[]{journeyId},
                 (rs, num) -> rs.getInt("point_ID")
         );

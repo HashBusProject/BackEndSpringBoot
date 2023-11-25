@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,45 +20,50 @@ import java.util.List;
 public class OrganizerControl {
     private OrganizerService organizerService;
     PointDAO pointDAO;
-    @GetMapping("/addJourney")
-    public ResponseEntity<Journey> addJourney(Journey journey) {
+    // this is DONE
+    @PostMapping("/addJourney")
+    public ResponseEntity<Journey> addJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.addJourney(journey);
         return new ResponseEntity<>(journey1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/editJourney")
-    public ResponseEntity<Journey> editJourney(Journey journey) {
+    //this is DONE
+    @PostMapping("/editJourney")
+    public ResponseEntity<Journey> editJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.editJourney(journey);
         return ResponseEntity.ok(journey1); // Accepted
     }
 
+    //TODO fix the loop
     @GetMapping("/viewJourney")
-    public ResponseEntity<Journey> viewJourney(Journey journey) {
+    public ResponseEntity<Journey> viewJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.viewJourney(journey);
         return ResponseEntity.ok(journey1);
     }
 
-    @GetMapping("/deleteJourney")
-    public ResponseEntity<Journey> deleteJourney(Journey journey) {
+    //TODO fix the loop
+    @PostMapping("/deleteJourney")
+    public ResponseEntity<Journey> deleteJourney(@RequestBody Journey journey) {
         organizerService.deleteJourney(journey);
         return ResponseEntity.ok(journey); // Deleted
     }
 
-    @GetMapping("/addPoint")
-    public ResponseEntity<Boolean> addPoint(Point point) {
+    // this is DONE
+    @PostMapping("/AddPoint")
+    public ResponseEntity<Boolean> addPoint(@RequestBody Point point) {
         organizerService.addPoint(point);
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping("/viewAllPoint")
+
+
+    // this is DONE
+    @GetMapping("/ViewAllPoint")
     public ResponseEntity<List<Point>> viewAllPoint() {
         List<Point> point = organizerService.viewAllPoint();
         return ResponseEntity.ok(point);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Point> getPointTest(@RequestBody Point point){
-        Point point1 = pointDAO.getPointById(point.getId());
-        return ResponseEntity.ok(point1);
-    }
+
+
 }

@@ -24,8 +24,7 @@ public class PointDAO {
     }
 
     public boolean insertPoint(Point point) {
-        return jdbcTemplate.update("insert into point (id, x, y, point_name) value (? , ?, ?, ?)",
-                point.getId(),
+        return jdbcTemplate.update("insert into points (x_point, y_point, point_name) values ( ?, ?, ?)",
                 point.getX(),
                 point.getY(),
                 point.getPointName()
@@ -33,7 +32,7 @@ public class PointDAO {
     }
 
     public List<Point> getAllPoint() {
-        return jdbcTemplate.query("select * form points ", pointMapper);
+        return jdbcTemplate.query("select * from points ", pointMapper);
 
     }
 

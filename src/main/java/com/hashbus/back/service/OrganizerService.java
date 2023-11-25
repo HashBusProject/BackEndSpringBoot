@@ -36,7 +36,7 @@ public class OrganizerService {
     }
 
     public Journey viewJourney(Journey journey) {
-        Journey journey1 = journeyDAO.getAllJourney();
+        Journey journey1 = journeyDAO.getJourney(journey.getId());
         if (journey == null)
             throw new OrganizerExeption("Please insert validate data!!");
         return journey1;
