@@ -34,14 +34,14 @@ public class OrganizerControl {
         return ResponseEntity.ok(journey1); // Accepted
     }
 
-    //TODO fix the loop
+    // this is DONE
     @GetMapping("/viewJourney")
     public ResponseEntity<Journey> viewJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.viewJourney(journey);
         return ResponseEntity.ok(journey1);
     }
 
-    //TODO fix the loop
+    // this is DONE
     @PostMapping("/deleteJourney")
     public ResponseEntity<Journey> deleteJourney(@RequestBody Journey journey) {
         organizerService.deleteJourney(journey);
