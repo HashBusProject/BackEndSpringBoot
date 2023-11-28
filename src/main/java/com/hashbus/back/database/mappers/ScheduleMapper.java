@@ -15,21 +15,14 @@ import java.sql.Time;
 @Repository
 @AllArgsConstructor
 public class ScheduleMapper implements RowMapper<Schedule> {
-    private final JourneyDAO journeyDAO;
-    private final BusDAO busDAO;
-
     @Override
     public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
         Schedule schedule = new Schedule();
-        schedule.setJourney(
-                journeyDAO.getJourney(rs.getInt("journey_id"))
-        );
-        schedule.setBus(
-                busDAO.getBusById(rs.getInt("bus_id"))
-        );
+        schedule.setJourney(rs.getInt("journey_id"));
+        schedule.setBus(rs.getInt("bus_id"));
         schedule.setTime(
                 Time.valueOf(rs.getString("time"))
         );
-        return null;
+        return schedule;
     }
 }

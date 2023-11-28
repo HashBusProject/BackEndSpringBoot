@@ -13,8 +13,8 @@ import java.util.HashSet;
 public class Journey {
     private Integer id;
     private String name;
-    private Point sourcePoint;
-    private Point destinationPoint;
+    private Integer sourcePoint;
+    private Integer destinationPoint;
     private HashSet<Integer> stopPoints;
     private HashSet<Schedule> journeys;
 }
