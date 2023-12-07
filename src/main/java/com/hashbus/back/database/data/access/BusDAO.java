@@ -21,10 +21,9 @@ public class BusDAO {
 
     }
     public boolean insertBus(Bus bus) {
-        return jdbcTemplate.update("insert into buses (bus_id , driver_ID , working ) values (? , ? , ? )",
-                bus.getId(),
-                bus.getDriver(),
-                bus.isWorking()
+        return jdbcTemplate.update("insert into buses (driver_ID , isWorking ) values (? , ?  )",
+                bus.getDriver().getUserID() ,
+                bus.getIsWorking()
         ) > 0;
     }
 
@@ -38,7 +37,7 @@ public class BusDAO {
         return jdbcTemplate.update("update buses set working = ?, driver_ID = ? where id = ?",
                 bus.getId(),
                 bus.getDriver().getUserID(),
-                bus.isWorking()
+                bus.getIsWorking()
         ) > 0;
     }
 

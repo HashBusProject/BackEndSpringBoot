@@ -11,12 +11,12 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/User")
 @AllArgsConstructor
 public class UserControl {
     private UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/Login")
     public ResponseEntity<User> login(@RequestBody User user) {
         User user1 = userService.login(user);
         return ResponseEntity.ok(user1);

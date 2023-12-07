@@ -16,33 +16,33 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/organizer")
+@RequestMapping("/Organizer")
 public class OrganizerControl {
     private OrganizerService organizerService;
     PointDAO pointDAO;
     // this is DONE
-    @PostMapping("/addJourney")
+    @PostMapping("/AddJourney")
     public ResponseEntity<Journey> addJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.addJourney(journey);
         return new ResponseEntity<>(journey1, HttpStatus.CREATED);
     }
 
     //this is DONE
-    @PostMapping("/editJourney")
+    @PutMapping("/EditJourney")
     public ResponseEntity<Journey> editJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.editJourney(journey);
         return ResponseEntity.ok(journey1); // Accepted
     }
 
     //TODO fix the loop
-    @GetMapping("/viewJourney")
+    @GetMapping("/ViewJourney")
     public ResponseEntity<Journey> viewJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.viewJourney(journey);
         return ResponseEntity.ok(journey1);
     }
 
     //TODO fix the loop
-    @PostMapping("/deleteJourney")
+    @PostMapping("/DeleteJourney")
     public ResponseEntity<Journey> deleteJourney(@RequestBody Journey journey) {
         organizerService.deleteJourney(journey);
         return ResponseEntity.ok(journey); // Deleted

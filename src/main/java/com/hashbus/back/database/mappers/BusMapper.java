@@ -20,7 +20,7 @@ public class BusMapper implements RowMapper<Bus> {
     public Bus mapRow(ResultSet rs, int rowNum) throws SQLException {
         Bus bus = new Bus();
         bus.setId(rs.getInt("bus_ID"));
-        bus.setWorking(rs.getBoolean("working"));
+        bus.setIsWorking(rs.getBoolean("working"));
         User driver = userDAO.getUserById(rs.getLong("user_ID"));
         bus.setDriver(driver);
         return bus;

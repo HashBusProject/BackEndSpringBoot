@@ -39,7 +39,7 @@ public class UserDAO {
 
     public boolean insertUser(User user) {
         return jdbcTemplate.update(
-                "insert into users (username, name, email, password, role) values (?,?,?,?)",
+                "insert into users (username, name, email, password, role) values (?,?,?,?,?)",
                 user.getUsername(),
                 user.getName(),
                 user.getEmail(),
