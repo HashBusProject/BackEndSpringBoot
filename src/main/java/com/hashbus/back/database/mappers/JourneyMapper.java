@@ -26,12 +26,9 @@ public class JourneyMapper implements RowMapper<Journey> {
     public Journey mapRow(ResultSet rs, int rowNum) throws SQLException {
         Journey journey = new Journey();
         journey.setId(rs.getInt("journey_ID"));
-        journey.setSourcePoint(
-                journeyDAO.getSourcePointForJourneyById( journey.getId())
-        );
-        journey.setDestinationPoint(
-                journeyDAO.getDestinationPointForJourneyById(journey.getId())
-        );
+        journey.setSourcePoint(rs.getInt("source_point_ID"));
+        journey.setDestinationPoint(rs.getInt("destination_point_ID"));
+        journey.setName(rs.getString("journey_name"));
         journey.setStopPoints(
                 journeyDAO.getStopPointsForJourneyById(journey.getId())
         );

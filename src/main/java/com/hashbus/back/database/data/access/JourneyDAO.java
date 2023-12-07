@@ -4,6 +4,7 @@ import com.hashbus.back.database.mappers.JourneyMapper;
 import com.hashbus.back.database.mappers.PointMapper;
 import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ public class JourneyDAO {
     private JourneyMapper journeyMapper;
 
     private PointMapper pointMapper;
-    public Journey getJourney(long id) {
+    public Journey getJourney(Integer id) {
         return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?", new Object[]{id}, journeyMapper);
     }
     public Journey getAllJourney(){
@@ -28,8 +29,8 @@ public class JourneyDAO {
     }
     public boolean insertJourney(Journey journey) {
         return jdbcTemplate.update("insert into journeys (source_point_ID , destination_point_ID , journey_name) values ( ?  , ? , ?  )",
-                journey.getSourcePoint().getId(),
-                journey.getDestinationPoint().getId(),
+                journey.getSourcePoint(),
+                journey.getDestinationPoint(),
                 journey.getName()
         ) > 0;
     }
@@ -40,12 +41,12 @@ public class JourneyDAO {
         ) > 0;
     }
 
-    public Point getSourcePointForJourneyById(Integer journeyId) {
-        return jdbcTemplate.queryForObject("select * from points where point_ID = (select journeys.source_point_ID from journeys where journey_ID = ?)", new Object[]{journeyId}, pointMapper);
+    public Integer getSourcePointForJourneyById(Integer journeyId) {
+        return jdbcTemplate.queryForObject("select journeys.source_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, Integer.class);
     }
 
-    public Point getDestinationPointForJourneyById(long journeyId) {
-        return jdbcTemplate.queryForObject("select * from points where point_ID = (select journeys.destination_point_ID from journeys where journey_ID = ?)", new Object[]{journeyId}, pointMapper);
+    public Integer getDestinationPointForJourneyById(long journeyId) {
+        return jdbcTemplate.queryForObject("select destination_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, Integer.class);
     }
 
     public HashSet<Integer> getStopPointsForJourneyById(Integer journeyId) {
@@ -53,7 +54,7 @@ public class JourneyDAO {
                 // TODO Check this
                 "SELECT points.*\n" +
                         "FROM points\n" +
-                        "JOIN stop_points_for_journey ON points.point_ID = stop_points_for_journey.point_ID\n" +
+                        "INNER JOIN stop_points_for_journey ON points.point_ID = stop_points_for_journey.point_ID\n" +
                         "WHERE stop_points_for_journey.journey_ID = ?",
                 new Object[]{journeyId},
                 (rs, num) -> rs.getInt("point_ID")
@@ -63,8 +64,8 @@ public class JourneyDAO {
     public boolean update(Journey journey){
         return jdbcTemplate.update("update journeys set journey_name =? , source_point_ID =? , destination_point_ID = ? where journey_ID=?" ,
                 journey.getName() ,
-                journey.getSourcePoint().getId(),
-                journey.getDestinationPoint().getId(),
+                journey.getSourcePoint(),
+                journey.getDestinationPoint(),
                 journey.getId()
         ) > 0 ;
     }
