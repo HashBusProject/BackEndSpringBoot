@@ -4,11 +4,14 @@ import com.hashbus.back.database.data.access.BusDAO;
 import com.hashbus.back.database.data.access.PointDAO;
 import com.hashbus.back.database.data.access.UserDAO;
 import com.hashbus.back.database.mappers.UserMapper;
+import com.hashbus.back.exceptions.AdminException;
 import com.hashbus.back.model.Bus;
 import com.hashbus.back.model.Point;
 import com.hashbus.back.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -54,6 +57,11 @@ public class AdminService {
         else {
             return null ;
         }
+    }
+    public List< User > getUser(int role)  {
+        if(role > 4 || role < 1)
+            new AdminException("Please enter valide role");
+        return userDAO.getUserByRole(role);
 
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Repository
 @Component
@@ -54,5 +56,11 @@ public class UserDAO {
                 user.getUsername()
         ) > 0;
     }
-
+    public List<User> getUserByRole(int role) {
+        return jdbcTemplate.query(
+                "select * from users where role=?",
+                new Object[]{role},
+                userMapper
+        );
+    }
 }

@@ -9,20 +9,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/Admin")
 public class AdminControl {
     AdminService adminService;
 
     // This is done
-    @PostMapping("AddUser")
+    @PostMapping("/AddUser")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         User user1 = adminService.addUser(user);
         return new ResponseEntity<>(user1 , HttpStatus.CREATED);
     }
     // This is done
-    @PostMapping("DeleteUser")
+    @PostMapping("/DeleteUser")
     public ResponseEntity<User> deleteUser (@RequestBody User user){
         User user1 = adminService.deleteUser(user)  ;
         return  ResponseEntity.ok(user1);
@@ -46,10 +49,10 @@ public class AdminControl {
         User user1 = adminService.deleteBusDriver(user) ;
         return ResponseEntity.ok(user1) ;
     }
-//    @PostMapping("AddBusDriver")
-//    public ResponseEntity<User> addBusDriver(User user , Bus bus) {
-//
-////        addUser(user);
-//
-//    }
+    @GetMapping ("/GetUser")
+    public ResponseEntity<List<User>> getUser(@RequestParam int role){ {
+        List<User> user =  adminService.getUser(role) ;
+        return ResponseEntity.ok(user) ;
+    }
+    }
 }
