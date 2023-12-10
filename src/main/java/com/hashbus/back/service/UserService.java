@@ -1,6 +1,7 @@
 package com.hashbus.back.service;
 
 import com.hashbus.back.database.data.access.*;
+import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.Point;
 import com.hashbus.back.model.User;
 import com.hashbus.back.exceptions.LoginException;
@@ -20,6 +21,7 @@ public class UserService {
     private PointDAO pointDAO;
 
     public User login(User user) throws LoginException {
+        System.out.println(user);
         User user1 = userDAO.getUserByUsername(user.getUsername());
         if (user1 == null) {
             throw new LoginException("Wrong Username!!");
@@ -30,5 +32,25 @@ public class UserService {
     }
     public List<Point> getAllPoint() {
         return pointDAO.getAllPoint();
+    }
+
+    public User createUser(User user) {
+        if(userDAO.getUserByUsername(user.getUsername()) != null || userDAO.getUserByEmail(user.getEmail()) != null)
+            throw new UserException("user name or email is already used");
+        if (userDAO.insertUser(user))
+            return user;
+        else {
+            return null;
+        }
+    }
+
+    public User changePassword(User user) {
+        User result = userDAO.getUserByEmail(user.getEmail());
+        if(result == null){
+            throw new UserException("User Not Found!!");
+        }
+        result.setPassword(user.getPassword());
+        if(userDAO.update(result) == 1) return result;
+        return null;
     }
 }

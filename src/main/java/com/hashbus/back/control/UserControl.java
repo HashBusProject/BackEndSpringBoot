@@ -32,4 +32,16 @@ public class UserControl {
         List<Point> points = userService.getAllPoint();
         return ResponseEntity.ok(points);
     }
+
+    @PostMapping("/SignUp")
+    public ResponseEntity<User> signUp(@RequestBody User user){
+        User result = userService.createUser(user);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/ChangePassword")
+    public ResponseEntity<User> changePassword(@RequestBody User user){
+        User result = userService.changePassword(user);
+        return ResponseEntity.ok(result);
+    }
 }
