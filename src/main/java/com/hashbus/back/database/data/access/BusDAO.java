@@ -2,9 +2,12 @@ package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.BusMapper;
 import com.hashbus.back.model.Bus;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @AllArgsConstructor
@@ -16,8 +19,8 @@ public class BusDAO {
         return jdbcTemplate.queryForObject("select * from bus where bus_id = ?", new Object[]{id}, busMapper);
     }
 
-    public Bus getAllBuses(){
-        return jdbcTemplate.queryForObject("select * from  buses ", busMapper);
+    public List<Bus> getAllBuses(){
+        return jdbcTemplate.query("select * from  buses ", busMapper);
 
     }
     public boolean insertBus(Bus bus) {
@@ -34,11 +37,16 @@ public class BusDAO {
     }
 
     public boolean updateBus(Bus bus){
-        return jdbcTemplate.update("update buses set working = ?, driver_ID = ? where id = ?",
-                bus.getId(),
+        return jdbcTemplate.update("update buses set isWorking = ?, driver_ID = ? where bus_id = ?",
+                bus.getIsWorking() ,
                 bus.getDriver().getUserID(),
-                bus.getIsWorking()
-        ) > 0;
+                bus.getId()
+                ) > 0;
+    }
+
+    public Integer getNumberOfBuses() {
+        return jdbcTemplate.queryForObject("select count(*) from buses ", Integer.class );
+
     }
 
 
