@@ -18,9 +18,9 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class AdminService {
-    UserDAO userDAO;
-    PointDAO pointDAO;
-    BusDAO busDAO;
+    private UserDAO userDAO;
+    private PointDAO pointDAO;
+    private BusDAO busDAO;
 
     public User addUser(User user) {
         if (userDAO.insertUser(user))

@@ -17,15 +17,12 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/Admin")
 public class AdminControl {
-    AdminService adminService;
-
+    private AdminService adminService;
     @PostMapping("/Login")
     public ResponseEntity<User> login(@RequestBody User user)  {
         User user1 =adminService.login(user) ;
         return ResponseEntity.ok(user1) ;
     }
-
-    // This is Done
     @PostMapping("/AddUser")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         User user1 = adminService.addUser(user);
@@ -59,19 +56,16 @@ public class AdminControl {
         return new ResponseEntity<>(bus1, HttpStatus.CREATED);
     }
 
-    //This is Done
     @GetMapping("/GetUser")
     public ResponseEntity<List<User>> getUser(@RequestParam int role) {
         List<User> user = adminService.getUser(role);
         return ResponseEntity.ok(user);
     }
-
     @GetMapping("/GetNumberOfUserByRole")
     public ResponseEntity<Integer> getNumberOfUserByRole(@RequestParam int role) {
         int numberOfUser = adminService.getNumberOfUserByRole(role);
         return ResponseEntity.ok(numberOfUser);
     }
-
     @PostMapping("/EditUser")
     public ResponseEntity<Boolean> editUser(@RequestBody User user) {
         if (adminService.editUser(user) > 0) {
