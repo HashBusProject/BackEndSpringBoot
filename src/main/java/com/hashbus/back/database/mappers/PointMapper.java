@@ -1,10 +1,7 @@
 package com.hashbus.back.database.mappers;
 
 import com.hashbus.back.database.data.access.PointDAO;
-import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
-import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,7 +30,7 @@ public class PointMapper implements RowMapper<Point> {
         point.setY(rs.getDouble("y_point"));
         point.setPointName(rs.getString("point_name"));
         point.setJourneysID(
-                (HashSet<Integer>) pointDAO.getAllJourneysById(point.getId())
+                (HashSet<Integer>) pointDAO.getAllJourneysByStopPointId(point.getId())
         );
         return point;
     }

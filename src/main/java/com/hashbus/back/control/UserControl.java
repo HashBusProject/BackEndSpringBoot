@@ -1,13 +1,17 @@
 package com.hashbus.back.control;
 
-import com.hashbus.back.model.Point;
-import com.hashbus.back.model.User;
+import com.google.gson.Gson;
+import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -23,7 +27,7 @@ public class UserControl {
     }
 
     @GetMapping
-    public String test(){
+    public String test() {
         return "test this fucking shit";
     }
 
@@ -34,14 +38,30 @@ public class UserControl {
     }
 
     @PostMapping("/SignUp")
-    public ResponseEntity<User> signUp(@RequestBody User user){
+    public ResponseEntity<User> signUp(@RequestBody User user) {
         User result = userService.createUser(user);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/ChangePassword")
-    public ResponseEntity<User> changePassword(@RequestBody User user){
+    public ResponseEntity<User> changePassword(@RequestBody User user) {
         User result = userService.changePassword(user);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/GetJourneysByPointId")
+    public ResponseEntity<Set<Journey>> getJourneysByPointId(@RequestBody Point point) {
+        Set<Journey> journeys = userService.getJourneysByPointId(point.getId());
+        return ResponseEntity.ok(journeys);
+    }
+
+    @GetMapping("/GetScheduleByPointsAndTime")
+    public ResponseEntity<List<SearchDataSchedule>> getScheduleByPointsAndTime(
+            @RequestParam Integer startPointId,
+            @RequestParam Integer endPointId,
+            @RequestParam String time) {
+        List<SearchDataSchedule> schedules = userService.getSearchData(startPointId, endPointId, time);
+        return ResponseEntity.ok(schedules);
+    }
+
 }

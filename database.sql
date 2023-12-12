@@ -18,7 +18,7 @@ CREATE TABLE users
 CREATE TABLE points
 (
     point_ID   INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    point_name varchar(50)        NOT NULL,
+    point_name varchar(50) NOT NULL,
     x_point    FLOAT,
     y_point    FLOAT
 );
@@ -35,7 +35,7 @@ CREATE TABLE tickets
 (
     ticket_ID  INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     price      DECIMAL(4, 2),
-    journey_ID INT not null ,
+    journey_ID INT not null,
     FOREIGN KEY (journey_ID) REFERENCES journeys (journey_ID)
 );
 
@@ -139,3 +139,21 @@ VALUES (1, 1, '08:00:00'),
        (1, 1, '13:00:00'),
        (2, 2, '18:30:00'),
        (3, 3, '14:00:00');
+
+
+SELECT s.bus_ID, s.journey_ID, s.time
+FROM schedules s
+         INNER JOIN journeys j ON s.journey_ID = j.journey_ID
+WHERE s.time >= '09:30:00'
+  AND (
+        (j.source_point_ID = (SELECT point_ID FROM points WHERE point_name = 'Point G')
+            OR EXISTS (SELECT *
+                       FROM stop_points_for_journey spj
+                       WHERE spj.journey_ID = j.journey_ID
+                         AND spj.point_ID = (SELECT point_ID FROM points WHERE point_name = 'Point G')))
+        AND (j.destination_point_ID = (SELECT point_ID FROM points WHERE point_name = 'Point J')
+        OR EXISTS (SELECT *
+                   FROM stop_points_for_journey spj
+                   WHERE spj.journey_ID = j.journey_ID
+                     AND spj.point_ID = (SELECT point_ID FROM points WHERE point_name = 'Point J')))
+    );

@@ -2,7 +2,6 @@ package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.JourneyMapper;
 import com.hashbus.back.database.mappers.PointMapper;
-import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,7 +42,7 @@ public class PointDAO {
     }
 
 
-    public Set<Integer> getAllJourneysById(Integer journeyId) {
+    public Set<Integer> getAllJourneysByStopPointId(Integer pointId) {
         return new HashSet<>(
                 jdbcTemplate.query(
                         "SELECT stop_points_for_journey.journey_ID\n" +
@@ -53,7 +52,7 @@ public class PointDAO {
                                 "SELECT journeys.journey_ID\n" +
                                 "FROM journeys\n" +
                                 "WHERE journeys.source_point_ID=?;"
-                        , new Object[]{journeyId, journeyId},
+                        , new Object[]{pointId, pointId},
                         ((rs, rowNum) -> rs.getInt(1))
                 )
         );
