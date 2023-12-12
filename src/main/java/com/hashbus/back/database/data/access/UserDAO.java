@@ -31,7 +31,7 @@ public class UserDAO {
 
     public User getUserById(long id) {
         return jdbcTemplate.queryForObject(
-                "select * from users where id=?",
+                "select * from users where user_id=?",
                 new Object[]{id},
                 userMapper
         );
@@ -51,7 +51,7 @@ public class UserDAO {
 
     public boolean insertUser(User user) {
         return jdbcTemplate.update(
-                "insert into users (username, name, email, password, rule_type_ID) values (?,?,?,?,?)",
+                "insert into users (username, name, email, password, role) values (?,?,?,?,?)",
                 user.getUsername(),
                 user.getName(),
                 user.getEmail(),
@@ -60,11 +60,13 @@ public class UserDAO {
         ) > 0;
     }
 
-    public boolean deleteUser(User user) {
-        return jdbcTemplate.update(
-                "delete from users where username=?",
-                user.getUsername()
-        ) > 0;
+    public boolean deleteUserById(int id) {
+        try {
+            int rowsAffected = jdbcTemplate.update("DELETE FROM users WHERE users.user_id=?", id);
+            return rowsAffected > 0;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
     public List<User> getUserByRole(int role) {
@@ -79,5 +81,21 @@ public class UserDAO {
         return jdbcTemplate.update(
                 "update users set password = ? where username=?;",
                 user.getPassword(), user.getUsername());
+    }
+    public int editUser(User user) {
+        return jdbcTemplate.update(
+        "update users set password = ? , email = ? , username = ? , name = ? where user_id=?;",
+                user.getPassword(), user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
+    }
+    public int getNumberOfUserByRole(int role){
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM users WHERE role = ?",
+                new Object[]{role},
+                Integer.class
+        );
+    }
+    public Integer getNumberOfUser() {
+        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
+
     }
 }

@@ -35,10 +35,16 @@ public class PointDAO {
 
     }
 
-    public boolean deletePoint(Point point) {
+    public boolean deletePoint(int id) {
         return jdbcTemplate.update("delete from points where point_ID =  ? ",
-                point.getId()
+                id
         ) > 0;
+    }
+    public Integer getNumberOfPoint(){
+        return jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM points ",
+                Integer.class
+        );
     }
 
 

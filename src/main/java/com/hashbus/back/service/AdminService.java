@@ -8,6 +8,8 @@ import com.hashbus.back.exceptions.AdminException;
 import com.hashbus.back.model.Bus;
 import com.hashbus.back.model.Point;
 import com.hashbus.back.model.User;
+import com.sun.tools.jconsole.JConsoleContext;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,9 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class AdminService {
-    UserDAO userDAO;
-    PointDAO pointDAO;
-    BusDAO busDAO;
+    private UserDAO userDAO;
+    private PointDAO pointDAO;
+    private BusDAO busDAO;
 
     public User addUser(User user) {
         if (userDAO.insertUser(user))
@@ -28,11 +30,11 @@ public class AdminService {
         }
     }
 
-    public User deleteUser(User user) {
-        if (userDAO.deleteUser(user)) {
-            return user;
-        } else {
-            return null;
+    public int deleteUser(int id) {
+        if (userDAO.deleteUserById(id)) {
+            return id;
+        }else{
+            throw new AdminException("this user does not exists");
         }
     }
 
@@ -51,17 +53,78 @@ public class AdminService {
             return null;
         }
     }
-    public User deleteBusDriver(User user) {
-        if( userDAO.deleteUser(user) )
-            return user ;
+    public Integer deleteBusDriver(int id) {
+        if( userDAO.deleteUserById(id) )
+            return id ;
         else {
             return null ;
         }
     }
     public List< User > getUser(int role)  {
         if(role > 4 || role < 1)
-            new AdminException("Please enter valide role");
+            throw new AdminException("Please enter valid role");
         return userDAO.getUserByRole(role);
-
+    }
+    public Integer getNumberOfUserByRole(int role) {
+        if(role > 4 || role < 1)
+            throw new AdminException("Please enter valid role");
+        return userDAO.getNumberOfUserByRole(role) ;
+    }
+    public Integer editUser(User user) {
+        if(user == null ) {
+            throw new AdminException("please enter valid data!!");
+        }else {
+            return userDAO.editUser(user);
+        }
+    }
+    public List<Point> getAllPoint(){
+        return pointDAO.getAllPoint();
+    }
+    public Boolean deletePoint(int id) {
+        if(pointDAO.deletePoint(id)){
+            return true ;
+        }else{
+            return false;
+        }
+    }
+    public Integer getNumberOfPoint(){
+        return pointDAO.getNumberOfPoint();
+    }
+    public List<Bus> getAllBuses(){
+        return busDAO.getAllBuses();
+    }
+    public Integer getNumberOfBuses() {
+        return busDAO.getNumberOfBuses() ;
+    }
+    public Boolean deleteBus( int id ) {
+        if( busDAO.deleteBus(id))
+            return true ;
+        else{
+            return false ;
+        }
+    }
+    public Boolean editBus(Bus bus) {
+        return busDAO.updateBus(bus) ;
+    }
+    public Integer getNumberOfUser(){
+        return userDAO.getNumberOfUser() ;
+    }
+    public User login(User user) {
+        if (user == null) {
+            throw new AdminException("Please enter valid user name!!");
+        }
+        User user1 = userDAO.getUserByUsername(user.getUsername());
+        if (user1 == null) {
+            throw new AdminException("User name not exist!");
+        }
+        if (user.getPassword().equals(user1.getPassword())) {
+            if (user1.getRole() == 4) {
+                return user1;
+            }else{
+                throw new AdminException("You are not admin!");
+            }
+        } else {
+            throw new AdminException("Wrong password!");
+        }
     }
 }
