@@ -6,11 +6,13 @@ import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
 import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Repository
@@ -68,5 +70,40 @@ public class JourneyDAO {
                 journey.getDestinationPoint(),
                 journey.getId()
         ) > 0 ;
+    }
+
+    public Set<Journey> getJourneysStartFromPointId(){
+        HashSet<Journey> journeys = new HashSet<>();
+        return journeys;
+    }
+
+    public Set<Journey> getJourneysBySourcePointId(Integer pointId) {
+        try {
+            return new HashSet<>(
+                    jdbcTemplate.query(
+                            "SELECT * FROM journeys where source_point_ID = ?",
+                            new Object[]{pointId},
+                            journeyMapper
+                    )
+            );
+        }
+        catch (EmptyResultDataAccessException e){
+            return new HashSet<>();
+        }
+    }
+
+    public Set<Journey> getJourneysByDestinationPointId(Integer pointId) {
+        try {
+            return new HashSet<>(
+                    jdbcTemplate.query(
+                            "SELECT * FROM journeys where destination_point_ID = ?",
+                            new Object[]{pointId},
+                            journeyMapper
+                    )
+            );
+        }
+        catch (EmptyResultDataAccessException e){
+            return new HashSet<>();
+        }
     }
 }

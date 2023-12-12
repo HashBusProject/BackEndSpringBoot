@@ -15,5 +15,7 @@ public class Bus {
     private Integer cap;
     private HashSet<Schedule> schedules;
     private Boolean isWorking;
+    private Double x;
+    private Double y;
 
 }
