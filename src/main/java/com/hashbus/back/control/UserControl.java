@@ -55,7 +55,6 @@ public class UserControl {
         Set<Journey> journeys = userService.getJourneysByPointId(point.getId());
         return ResponseEntity.ok(journeys);
     }
-
     @GetMapping("/GetScheduleByPointsAndTime")
     public ResponseEntity<List<SearchDataSchedule>> getScheduleByPointsAndTime(
             @RequestParam Integer startPointId,
@@ -68,23 +67,23 @@ public class UserControl {
     public ResponseEntity<List<Journey>> getAllJournys() {
         return ResponseEntity.ok(userService.getAllJournys());
     }
-    @PostMapping("/GetPointById")
+    @GetMapping("/GetPointById")
     public ResponseEntity<Point> getPointById(@RequestBody Point point){
         Point point1 = userService.getPointById(point.getId());
         return ResponseEntity.ok(point1) ;
     }
 
-    @PostMapping("/GetJourneyById")
+    @GetMapping("/GetJourneyById")
     public ResponseEntity<Journey> getJourneyById(@RequestBody Journey journey) {
         Journey journey1 = userService.getJourneyById(journey.getId());
         return ResponseEntity.ok(journey1) ;
     }
-    @PostMapping ("/GetBusById")
+    @GetMapping ("/GetBusById")
     public ResponseEntity<Bus> getBusById(@RequestBody Bus bus){
         Bus bus1 = userService.getBusById(bus.getId());
         return ResponseEntity.ok(bus1);
     }
-    @PostMapping("/GetTicketsByUserId")
+    @GetMapping("/GetTicketsByUserId")
     public ResponseEntity<List<Ticket>> getTicketsByUserId(@RequestBody User user) {
         List <Ticket> tickets = userService.getTicketsByUserId(user.getUserID()) ;
         return ResponseEntity.ok(tickets);
