@@ -96,6 +96,5 @@ public class UserDAO {
     }
     public Integer getNumberOfUser() {
         return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
-
     }
 }

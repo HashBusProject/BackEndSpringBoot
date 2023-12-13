@@ -23,11 +23,11 @@ public class JourneyDAO {
     private JourneyMapper journeyMapper;
 
     private PointMapper pointMapper;
-    public Journey getJourney(Integer id) {
+    public Journey getJourneyById(Integer id) {
         return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?", new Object[]{id}, journeyMapper);
     }
-    public Journey getAllJourney(){
-        return jdbcTemplate.queryForObject("select * from journeys )", journeyMapper);
+    public List<Journey> getAllJourney(){
+        return jdbcTemplate.query("select * from journeys ", journeyMapper);
     }
     public boolean insertJourney(Journey journey) {
         return jdbcTemplate.update("insert into journeys (source_point_ID , destination_point_ID , journey_name) values ( ?  , ? , ?  )",

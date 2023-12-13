@@ -17,8 +17,8 @@ import java.util.List;
 public class ApplicationConfiguration {
     private static final String driverClassName = "com.mysql.jdbc.Driver";
     @Value("${url}")
-    private static final String URL = "jdbc:mysql://google/hashbus?cloudSqlInstance=global-memento-407716:us-central1:hashbus1&socketFactory=com.google.cloud.sql.mysql.SocketFactory";
-//    private static final String URL = "jdbc:mysql://34.172.119.160/hashbus";
+//    private static final String URL = "jdbc:mysql://google/hashbus?cloudSqlInstance=global-memento-407716:us-central1:hashbus1&socketFactory=com.google.cloud.sql.mysql.SocketFactory";
+    private static final String URL = "jdbc:mysql://34.172.119.160/hashbus";
     private static final String dbUsername = "root";
     private static final String dbPassword = "Deya@12@";
 

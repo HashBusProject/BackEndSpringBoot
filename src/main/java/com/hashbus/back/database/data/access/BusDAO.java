@@ -16,7 +16,7 @@ public class BusDAO {
     private BusMapper busMapper;
 
     public Bus getBusById(long id) {
-        return jdbcTemplate.queryForObject("select * from bus where bus_id = ?", new Object[]{id}, busMapper);
+        return jdbcTemplate.queryForObject("select * from buses where bus_id = ?", new Object[]{id}, busMapper);
     }
 
     public List<Bus> getAllBuses(){

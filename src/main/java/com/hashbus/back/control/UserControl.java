@@ -1,6 +1,7 @@
 package com.hashbus.back.control;
 
 import com.google.gson.Gson;
+import com.hashbus.back.database.mappers.TicketMapper;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
 import lombok.AllArgsConstructor;
@@ -63,5 +64,36 @@ public class UserControl {
         List<SearchDataSchedule> schedules = userService.getSearchData(startPointId, endPointId, time);
         return ResponseEntity.ok(schedules);
     }
+    @GetMapping("/GetAllJournys")
+    public ResponseEntity<List<Journey>> getAllJournys() {
+        return ResponseEntity.ok(userService.getAllJournys());
+    }
+    @PostMapping("/GetPointById")
+    public ResponseEntity<Point> getPointById(@RequestBody Point point){
+        Point point1 = userService.getPointById(point.getId());
+        return ResponseEntity.ok(point1) ;
+    }
 
+    @PostMapping("/GetJourneyById")
+    public ResponseEntity<Journey> getJourneyById(@RequestBody Journey journey) {
+        Journey journey1 = userService.getJourneyById(journey.getId());
+        return ResponseEntity.ok(journey1) ;
+    }
+    @PostMapping ("/GetBusById")
+    public ResponseEntity<Bus> getBusById(@RequestBody Bus bus){
+        Bus bus1 = userService.getBusById(bus.getId());
+        return ResponseEntity.ok(bus1);
+    }
+    @PostMapping("/GetTicketsByUserId")
+    public ResponseEntity<List<Ticket>> getTicketsByUserId(@RequestBody User user) {
+        List <Ticket> tickets = userService.getTicketsByUserId(user.getUserID()) ;
+        return ResponseEntity.ok(tickets);
+    }
+    @PostMapping("/BuyTicket")
+    public ResponseEntity<Boolean> buyTicket(
+            @RequestParam Integer userId ,
+            @RequestParam Integer journeyId
+    ){
+        return ResponseEntity.ok(userService.buyTicket(userId , journeyId));
+    }
 }

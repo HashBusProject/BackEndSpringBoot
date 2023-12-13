@@ -19,7 +19,7 @@ public class UserMapper implements RowMapper<User> {
         user.setEmail(resultSet.getString("email"));
         user.setPassword(resultSet.getString("password"));
         user.setUserID(resultSet.getInt("user_ID"));
-        user.setRole(resultSet.getInt("role"));
+        user.setRole(resultSet.getInt("rule_type_id"));
         return user;
     }
 }

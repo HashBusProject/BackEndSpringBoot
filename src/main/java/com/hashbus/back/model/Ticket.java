@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class Ticket {
     private Integer id;
-    private Double price;
     private Journey journey;
+    private User user;
 }

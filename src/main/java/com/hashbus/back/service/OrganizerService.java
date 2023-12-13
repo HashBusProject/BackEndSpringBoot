@@ -36,14 +36,14 @@ public class OrganizerService {
     }
 
     public Journey viewJourney(Journey journey) {
-        Journey journey1 = journeyDAO.getJourney(journey.getId());
+        Journey journey1 = journeyDAO.getJourneyById(journey.getId());
         if (journey == null)
             throw new OrganizerExeption("Please insert validate data!!");
         return journey1;
     }
 
     public boolean deleteJourney(Journey journey){
-        Journey journey1 = journeyDAO.getJourney(journey.getId()) ;
+        Journey journey1 = journeyDAO.getJourneyById(journey.getId()) ;
         if(journey1 == null)
             throw new OrganizerExeption("this journey does not exist") ;
         return journeyDAO.deleteJourney(journey);

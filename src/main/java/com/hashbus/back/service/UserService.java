@@ -2,11 +2,9 @@ package com.hashbus.back.service;
 
 import com.hashbus.back.database.data.access.*;
 import com.hashbus.back.exceptions.UserException;
-import com.hashbus.back.model.Journey;
-import com.hashbus.back.model.Point;
-import com.hashbus.back.model.SearchDataSchedule;
-import com.hashbus.back.model.User;
+import com.hashbus.back.model.*;
 import com.hashbus.back.exceptions.LoginException;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +22,7 @@ public class UserService {
     private ScheduleDAO scheduleDAO;
     private TicketDAO ticketDAO;
     private PointDAO pointDAO;
+    private BusDAO busDAO;
 
     public User login(User user) throws LoginException {
         System.out.println(user);
@@ -64,7 +63,7 @@ public class UserService {
         Set<Integer> journeysId = pointDAO.getAllJourneysByStopPointId(id);
         HashSet<Journey> journeys = new HashSet<>();
         journeysId.forEach(x ->
-                journeys.add(journeyDAO.getJourney(x))
+                journeys.add(journeyDAO.getJourneyById(x))
         );
         journeys.addAll(journeyDAO.getJourneysBySourcePointId(id));
         journeys.addAll(journeyDAO.getJourneysByDestinationPointId(id));
@@ -77,5 +76,45 @@ public class UserService {
         }
         List<SearchDataSchedule> list = scheduleDAO.getScheduleByPointIdsAndTime(startPointId, endPointId, time);
         return list;
+    }
+    public List<Journey> getAllJournys(){
+        List<Journey> journeys = journeyDAO.getAllJourney();
+        if(journeys.size() == 0 ){
+            throw new UserException("There is no journys") ;
+        }
+        return journeys;
+    }
+    public Point getPointById(Integer id) {
+        if(id == null ){
+            throw new UserException("Wrong Data!") ;
+        }
+        Point point =  pointDAO.getPointById(id) ;
+        return point ;
+    }
+    public Journey getJourneyById(Integer id){
+        if(id == null ) {
+            throw new UserException("Wrong Data!") ;
+        }
+        Journey journey = journeyDAO.getJourneyById(id) ;
+        return journey;
+    }
+    public Bus getBusById(Integer id){
+        if(id == null){
+            throw new UserException("Wrong Data!");
+        }
+        return busDAO.getBusById(id) ;
+    }
+    public List<Ticket> getTicketsByUserId(Integer id) {
+        if(id == null ){
+            throw new UserException("Wrong Data!");
+        }
+        List<Ticket> tickets = ticketDAO.getTicketsByUserId(id) ;
+        return tickets;
+    }
+    public Boolean buyTicket(Integer userId , Integer journeyId ) {
+        if(userId == null || journeyId == null) {
+            throw new UserException("Wrong Data!") ;
+        }
+        return ticketDAO.buyTicket(userId , journeyId) ;
     }
 }
