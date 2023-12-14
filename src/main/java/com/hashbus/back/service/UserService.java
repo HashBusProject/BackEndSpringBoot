@@ -4,7 +4,6 @@ import com.hashbus.back.database.data.access.*;
 import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.exceptions.LoginException;
-import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -116,5 +115,15 @@ public class UserService {
             throw new UserException("Wrong Data!") ;
         }
         return ticketDAO.buyTicket(userId , journeyId) ;
+    }
+
+    public List<Point> getAllPointByJourneyId(Integer journeyId) {
+        List<Point> points = new ArrayList<>();
+        points.add(pointDAO.getPointById(journeyDAO.getSourcePointForJourneyById(journeyId)));
+        for (Integer pointId: journeyDAO.getStopPointsForJourneyById(journeyId)) {
+            points.add(pointDAO.getPointById(pointId));
+        }
+        points.add(pointDAO.getPointById(journeyDAO.getDestinationPointForJourneyById(journeyId)));
+        return points;
     }
 }

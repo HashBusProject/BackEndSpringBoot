@@ -55,6 +55,7 @@ public class UserControl {
         Set<Journey> journeys = userService.getJourneysByPointId(point.getId());
         return ResponseEntity.ok(journeys);
     }
+
     @GetMapping("/GetScheduleByPointsAndTime")
     public ResponseEntity<List<SearchDataSchedule>> getScheduleByPointsAndTime(
             @RequestParam Integer startPointId,
@@ -63,35 +64,45 @@ public class UserControl {
         List<SearchDataSchedule> schedules = userService.getSearchData(startPointId, endPointId, time);
         return ResponseEntity.ok(schedules);
     }
+
     @GetMapping("/GetAllJournys")
     public ResponseEntity<List<Journey>> getAllJournys() {
         return ResponseEntity.ok(userService.getAllJournys());
     }
+
     @GetMapping("/GetPointById")
-    public ResponseEntity<Point> getPointById(@RequestBody Point point){
-        Point point1 = userService.getPointById(point.getId());
-        return ResponseEntity.ok(point1) ;
+    public ResponseEntity<Point> getPointById(@RequestParam Integer pointId) {
+        Point point1 = userService.getPointById(pointId);
+        return ResponseEntity.ok(point1);
     }
     @GetMapping("/GetJourneyById")
-    public ResponseEntity<Journey> getJourneyById(@RequestBody Journey journey) {
-        Journey journey1 = userService.getJourneyById(journey.getId());
-        return ResponseEntity.ok(journey1) ;
+    public ResponseEntity<Journey> getJourneyById(@RequestParam Integer journeyId) {
+        Journey journey1 = userService.getJourneyById(journeyId);
+        return ResponseEntity.ok(journey1);
     }
-    @GetMapping ("/GetBusById")
-    public ResponseEntity<Bus> getBusById(@RequestBody Bus bus){
-        Bus bus1 = userService.getBusById(bus.getId());
+
+    @GetMapping("/GetBusById")
+    public ResponseEntity<Bus> getBusById(@RequestParam Integer busId) {
+        Bus bus1 = userService.getBusById(busId);
         return ResponseEntity.ok(bus1);
     }
+
     @GetMapping("/GetTicketsByUserId")
-    public ResponseEntity<List<Ticket>> getTicketsByUserId(@RequestBody User user) {
-        List <Ticket> tickets = userService.getTicketsByUserId(user.getUserID()) ;
+    public ResponseEntity<List<Ticket>> getTicketsByUserId(@RequestParam Integer userId) {
+        List<Ticket> tickets = userService.getTicketsByUserId(userId);
         return ResponseEntity.ok(tickets);
     }
+
     @PostMapping("/BuyTicket")
     public ResponseEntity<Boolean> buyTicket(
-            @RequestParam Integer userId ,
-            @RequestParam Integer journeyId
-    ){
-        return ResponseEntity.ok(userService.buyTicket(userId , journeyId));
+            @RequestParam Integer userId,
+            @RequestParam Integer journeyId) {
+        return ResponseEntity.ok(userService.buyTicket(userId, journeyId));
+    }
+
+    @GetMapping("/AllPointByJourneyId")
+    public ResponseEntity<List<Point>> AllPointByJourneyId(@RequestParam Integer journeyId){
+        List<Point> list = userService.getAllPointByJourneyId(journeyId);
+        return ResponseEntity.ok(list);
     }
 }

@@ -3,13 +3,12 @@ package com.hashbus.back.database.data.access;
 import com.hashbus.back.database.mappers.JourneyMapper;
 import com.hashbus.back.database.mappers.PointMapper;
 import com.hashbus.back.model.Journey;
-import com.hashbus.back.model.Point;
-import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,12 +22,15 @@ public class JourneyDAO {
     private JourneyMapper journeyMapper;
 
     private PointMapper pointMapper;
+
     public Journey getJourneyById(Integer id) {
         return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?", new Object[]{id}, journeyMapper);
     }
-    public List<Journey> getAllJourneys(){
+
+    public List<Journey> getAllJourneys() {
         return jdbcTemplate.query("select * from journeys ", journeyMapper);
     }
+
     public boolean insertJourney(Journey journey) {
         return jdbcTemplate.update("insert into journeys (source_point_ID , destination_point_ID , journey_name) values ( ?  , ? , ?  )",
                 journey.getSourcePoint(),
@@ -50,35 +52,36 @@ public class JourneyDAO {
     public Integer getDestinationPointForJourneyById(long journeyId) {
         return jdbcTemplate.queryForObject("select destination_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, Integer.class);
     }
-    public Integer getNumberOfJourneys(){
-        return jdbcTemplate.queryForObject("select count(*) from journeys" ,
-                Integer.class) ;
+
+    public Integer getNumberOfJourneys() {
+        return jdbcTemplate.queryForObject("select count(*) from journeys",
+                Integer.class);
     }
 
-    public HashSet<Integer> getStopPointsForJourneyById(Integer journeyId) {
-        List<Integer> actors = jdbcTemplate.query(
-                // TODO Check this
-                "SELECT points.*\n" +
-                        "FROM points\n" +
-                        "INNER JOIN stop_points_for_journey ON points.point_ID = stop_points_for_journey.point_ID\n" +
-                        "WHERE stop_points_for_journey.journey_ID = ?",
-                new Object[]{journeyId},
-                (rs, num) -> rs.getInt("point_ID")
-        );
-        return new HashSet<>(actors);
+    public List<Integer> getStopPointsForJourneyById(Integer journeyId) {
+        List<Integer> actors = new ArrayList<>();
+        try {
+            actors = jdbcTemplate.query(
+                    "SELECT points.*\n" +
+                            "FROM points\n" +
+                            "INNER JOIN stop_points_for_journey ON points.point_ID = stop_points_for_journey.point_ID\n" +
+                            "WHERE stop_points_for_journey.journey_ID = ?",
+                    new Object[]{journeyId},
+                    (rs, num) -> rs.getInt("point_ID")
+            );
+            return actors;
+        } catch (EmptyResultDataAccessException e) {
+            return actors;
+        }
     }
-    public boolean update(Journey journey){
-        return jdbcTemplate.update("update journeys set journey_name =? , source_point_ID =? , destination_point_ID = ? where journey_ID=?" ,
-                journey.getName() ,
+
+    public boolean update(Journey journey) {
+        return jdbcTemplate.update("update journeys set journey_name =? , source_point_ID =? , destination_point_ID = ? where journey_ID=?",
+                journey.getName(),
                 journey.getSourcePoint(),
                 journey.getDestinationPoint(),
                 journey.getId()
-        ) > 0 ;
-    }
-
-    public Set<Journey> getJourneysStartFromPointId(){
-        HashSet<Journey> journeys = new HashSet<>();
-        return journeys;
+        ) > 0;
     }
 
     public Set<Journey> getJourneysBySourcePointId(Integer pointId) {
@@ -90,8 +93,7 @@ public class JourneyDAO {
                             journeyMapper
                     )
             );
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return new HashSet<>();
         }
     }
@@ -105,8 +107,7 @@ public class JourneyDAO {
                             journeyMapper
                     )
             );
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return new HashSet<>();
         }
     }

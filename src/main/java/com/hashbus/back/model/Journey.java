@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,8 +16,7 @@ public class Journey {
     private String name;
     private Integer sourcePoint;
     private Integer destinationPoint;
-    private HashSet<Integer> stopPoints;
+    private List<Integer> stopPoints;
     private Double price;
-
     private HashSet<Schedule> journeys;
 }
