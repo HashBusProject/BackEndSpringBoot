@@ -78,7 +78,7 @@ public class UserService {
         return list;
     }
     public List<Journey> getAllJournys(){
-        List<Journey> journeys = journeyDAO.getAllJourney();
+        List<Journey> journeys = journeyDAO.getAllJourneys();
         if(journeys.size() == 0 ){
             throw new UserException("There is no journys") ;
         }

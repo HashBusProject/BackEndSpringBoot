@@ -37,5 +37,12 @@ public class TicketDAO {
                 userId ,
                 journeyId ) > 0 ;
     }
+    public Integer getNumberOfTickets() {
+        return jdbcTemplate.queryForObject("select count(*) from tickets",
+                Integer.class);
+    }
+    public List<Ticket> getAllTickets(){
+        return jdbcTemplate.query("select * from tickets" , ticketMapper) ;
+    }
 
 }

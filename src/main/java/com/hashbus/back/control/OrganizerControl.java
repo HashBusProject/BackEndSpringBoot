@@ -1,9 +1,11 @@
 package com.hashbus.back.control;
 
 import com.hashbus.back.database.data.access.PointDAO;
+import com.hashbus.back.database.data.access.TicketDAO;
 import com.hashbus.back.model.Bus;
 import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Point;
+import com.hashbus.back.model.Ticket;
 import com.hashbus.back.service.OrganizerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,33 +18,33 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/organizer")
+@RequestMapping("/Organizer")
 public class OrganizerControl {
     private OrganizerService organizerService;
     PointDAO pointDAO;
     // this is DONE
-    @PostMapping("/addJourney")
+    @PostMapping("/AddJourney")
     public ResponseEntity<Journey> addJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.addJourney(journey);
         return new ResponseEntity<>(journey1, HttpStatus.CREATED);
     }
 
     //this is DONE
-    @PostMapping("/editJourney")
+    @PostMapping("/EditJourney")
     public ResponseEntity<Journey> editJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.editJourney(journey);
         return ResponseEntity.ok(journey1); // Accepted
     }
 
     // this is DONE
-    @GetMapping("/viewJourney")
-    public ResponseEntity<Journey> viewJourney(@RequestBody Journey journey) {
-        Journey journey1 = organizerService.viewJourney(journey);
-        return ResponseEntity.ok(journey1);
+    @GetMapping("/GetAllJourneys")
+    public ResponseEntity<List<Journey>> getAllJourneys() {
+        List<Journey> journeys = organizerService.getAllJourneys();
+        return ResponseEntity.ok(journeys);
     }
 
     // this is DONE
-    @PostMapping("/deleteJourney")
+    @PostMapping("/DeleteJourney")
     public ResponseEntity<Journey> deleteJourney(@RequestBody Journey journey) {
         organizerService.deleteJourney(journey);
         return ResponseEntity.ok(journey); // Deleted
@@ -63,7 +65,19 @@ public class OrganizerControl {
         List<Point> point = organizerService.viewAllPoint();
         return ResponseEntity.ok(point);
     }
+    @GetMapping("/GetNumberOfJourneys")
+    public ResponseEntity<Integer> getNumberOfJourneys(){
+        return ResponseEntity.ok(organizerService.getNumberOfJourneys());
+    }
+    @GetMapping("GetNumberOfTickets")
+    public ResponseEntity<Integer> getNumberOfTickets(){
+        return ResponseEntity.ok(organizerService.getNumberOfTickets());
+    }
 
+    @GetMapping("GetAllTickets")
+    public ResponseEntity<List<Ticket>> getAllTickets(){
+        return ResponseEntity.ok(organizerService.getAllTickets());
+    }
 
 
 }

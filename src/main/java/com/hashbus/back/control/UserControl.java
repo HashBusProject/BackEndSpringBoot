@@ -72,7 +72,6 @@ public class UserControl {
         Point point1 = userService.getPointById(point.getId());
         return ResponseEntity.ok(point1) ;
     }
-
     @GetMapping("/GetJourneyById")
     public ResponseEntity<Journey> getJourneyById(@RequestBody Journey journey) {
         Journey journey1 = userService.getJourneyById(journey.getId());

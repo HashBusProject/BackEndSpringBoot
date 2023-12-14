@@ -26,7 +26,7 @@ public class JourneyDAO {
     public Journey getJourneyById(Integer id) {
         return jdbcTemplate.queryForObject("select * from journeys where journey_ID = ?", new Object[]{id}, journeyMapper);
     }
-    public List<Journey> getAllJourney(){
+    public List<Journey> getAllJourneys(){
         return jdbcTemplate.query("select * from journeys ", journeyMapper);
     }
     public boolean insertJourney(Journey journey) {
@@ -49,6 +49,10 @@ public class JourneyDAO {
 
     public Integer getDestinationPointForJourneyById(long journeyId) {
         return jdbcTemplate.queryForObject("select destination_point_ID from journeys where journey_ID = ?", new Object[]{journeyId}, Integer.class);
+    }
+    public Integer getNumberOfJourneys(){
+        return jdbcTemplate.queryForObject("select count(*) from journeys" ,
+                Integer.class) ;
     }
 
     public HashSet<Integer> getStopPointsForJourneyById(Integer journeyId) {
