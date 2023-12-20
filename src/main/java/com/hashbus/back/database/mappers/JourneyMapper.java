@@ -28,6 +28,7 @@ public class JourneyMapper implements RowMapper<Journey> {
         journey.setId(rs.getInt("journey_ID"));
         journey.setSourcePoint(rs.getInt("source_point_ID"));
         journey.setDestinationPoint(rs.getInt("destination_point_ID"));
+        journey.setPrice(rs.getDouble("ticket_price"));
         journey.setName(rs.getString("journey_name"));
         journey.setStopPoints(
                 journeyDAO.getStopPointsForJourneyById(journey.getId())

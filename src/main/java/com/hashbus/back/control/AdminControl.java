@@ -76,7 +76,7 @@ public class AdminControl {
     }
 
     @GetMapping("/GetAllPoint")
-    public ResponseEntity<List<Point>> GetAllPoint() {
+    public ResponseEntity<List<Point>> getAllPoint() {
         return ResponseEntity.ok(adminService.getAllPoint());
     }
 

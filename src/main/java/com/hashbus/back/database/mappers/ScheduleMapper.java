@@ -23,6 +23,7 @@ public class ScheduleMapper implements RowMapper<Schedule> {
         schedule.setTime(
                 Time.valueOf(rs.getString("time"))
         );
+        schedule.setPassengersNumber(rs.getInt("passengers_number"));
         return schedule;
     }
 }

@@ -51,7 +51,7 @@ public class UserDAO {
 
     public boolean insertUser(User user) {
         return jdbcTemplate.update(
-                "insert into users (username, name, email, password, role) values (?,?,?,?,?)",
+                "insert into users (username, name, email, password, rule_type_Id) values (?,?,?,?,?)",
                 user.getUsername(),
                 user.getName(),
                 user.getEmail(),
@@ -71,7 +71,7 @@ public class UserDAO {
 
     public List<User> getUserByRole(int role) {
         return jdbcTemplate.query(
-                "select * from users where role=?",
+                "select * from users where rule_type_Id=?",
                 new Object[]{role},
                 userMapper
         );
@@ -89,13 +89,12 @@ public class UserDAO {
     }
     public int getNumberOfUserByRole(int role){
         return jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM users WHERE role = ?",
+                "SELECT COUNT(*) FROM users WHERE rule_type_Id = ?",
                 new Object[]{role},
                 Integer.class
         );
     }
     public Integer getNumberOfUser() {
         return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
-
     }
 }
