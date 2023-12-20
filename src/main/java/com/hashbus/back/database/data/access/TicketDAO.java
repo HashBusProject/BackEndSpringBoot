@@ -45,4 +45,8 @@ public class TicketDAO {
         return jdbcTemplate.query("select * from tickets" , ticketMapper) ;
     }
 
+    public Boolean deleteAllTickets(){
+        return jdbcTemplate.update("delete from tickets") > 0 ;
+    }
+
 }
