@@ -11,12 +11,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Repository
 public class ScheduleDAO {
     private JdbcTemplate jdbcTemplate;
     private ScheduleMapper scheduleMapper;
+    private PointDAO pointDAO;
+    private UserDAO userDAO;
+    private JourneyDAO journeyDAO;
 
     public HashSet<Schedule> getSchedulesByJourneyId(long journeyId) {
         return new HashSet<>(jdbcTemplate.query(
@@ -28,25 +32,26 @@ public class ScheduleDAO {
 
     public List<SearchDataSchedule> getScheduleByPointIdsAndTime(Integer startPointId, Integer endPointId, String time) {
         try {
-            return jdbcTemplate.query(
-                    "SELECT *\n" +
-                            "FROM schedules s\n" +
-                            "         INNER JOIN journeys j ON s.journey_ID = j.journey_ID\n" +
-                            "         INNER JOIN buses b ON s.bus_ID = b.bus_ID\n" +
-                            "WHERE s.time >= ? and b.working = 1\n" +
-                            "  AND (\n" +
-                            "        (j.source_point_ID = ?\n" +
-                            "            OR EXISTS (SELECT *\n" +
-                            "                       FROM stop_points_for_journey spj\n" +
-                            "                       WHERE spj.journey_ID = j.journey_ID\n" +
-                            "                         AND spj.point_ID = ?))\n" +
-                            "        AND (j.destination_point_ID = ?\n" +
-                            "        OR EXISTS (SELECT *\n" +
-                            "                   FROM stop_points_for_journey spj\n" +
-                            "                   WHERE spj.journey_ID = j.journey_ID\n" +
-                            "                     AND spj.point_ID = ?))\n" +
-                            "    )\n" +
-                            "ORDER BY time;",
+            return jdbcTemplate.query("""
+                            SELECT *
+                                    FROM schedules s
+                                             INNER JOIN journeys j ON s.journey_ID = j.journey_ID
+                                             INNER JOIN buses b ON s.bus_ID = b.bus_ID
+                                    WHERE s.time >= ? and b.working = 1
+                                      AND (
+                                            (j.source_point_ID = ?
+                                                OR EXISTS (SELECT *\s
+                                                           FROM stop_points_for_journey spj
+                                                           WHERE spj.journey_ID = j.journey_ID
+                                                             AND spj.point_ID = ?
+                                                             and s.next_point_index <= spj.index))
+                                            AND (j.destination_point_ID = ?
+                                            OR EXISTS (SELECT *
+                                                       FROM stop_points_for_journey spj1
+                                                       WHERE spj1.journey_ID = j.journey_ID
+                                                         AND spj1.point_ID = ?))
+                                        )
+                                    ORDER BY s.time , next_point_index;""",
                     new Object[]{time, startPointId, startPointId, endPointId, endPointId},
                     rs -> {
                         List<SearchDataSchedule> list = new ArrayList<>();
@@ -54,21 +59,28 @@ public class ScheduleDAO {
                             Schedule schedule = new Schedule();
                             Journey journey = new Journey();
                             Bus bus = new Bus();
-                            schedule.setBus(rs.getInt(1));
-                            schedule.setJourney(rs.getInt(2));
-                            schedule.setTime(rs.getTime(3));
-                            journey.setId(rs.getInt(4));
-                            journey.setSourcePoint(rs.getInt(5));
-                            journey.setDestinationPoint(rs.getInt(6));
-                            journey.setName(rs.getString(7));
-                            bus.setId(rs.getInt(8));
-//                            bus.setDriver(rs.getInt(9));
-                            bus.setIsWorking(rs.getInt(10) == 1);
-                            bus.setX(rs.getDouble(11));
-                            bus.setY(rs.getDouble(12));
+                            schedule.setBus(rs.getInt("s.bus_ID"));
+                            schedule.setJourney(rs.getInt("s.journey_ID"));
+                            schedule.setTime(rs.getTime("time"));
+                            schedule.setNextPoint(
+                                    rs.getInt("next_point_index")
+                            );
+                            schedule.setPassengersNumber(rs.getInt("passengers_number"));
+                            journey.setId(rs.getInt("j.journey_ID"));
+                            journey.setSourcePoint(rs.getInt("source_point_ID"));
+                            journey.setDestinationPoint(rs.getInt("destination_point_ID"));
+                            journey.setName(rs.getString("journey_name"));
+                            journey.setPrice(rs.getDouble("ticket_price"));
+                            bus.setId(rs.getInt("b.bus_ID"));
+                            bus.setDriver(
+                                    userDAO.getUserById(rs.getInt("driver_ID"))
+                            );
+                            bus.setIsWorking(rs.getInt("working") == 1);
+                            bus.setX(rs.getDouble("x_point"));
+                            bus.setY(rs.getDouble("y_point"));
+                            bus.setCap(rs.getInt("capacity"));
                             list.add(new SearchDataSchedule(journey, schedule, bus));
                         }
-                        System.out.println(list);
                         return list;
                     }
             );
