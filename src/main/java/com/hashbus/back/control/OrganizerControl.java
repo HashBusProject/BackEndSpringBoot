@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.util.List;
 
 @RestController
@@ -97,5 +98,15 @@ public class OrganizerControl {
     @GetMapping("/GetNumberOfSchedules")
     public ResponseEntity<Integer> getNumberOfSchedules(){
         return ResponseEntity.ok(organizerService.getNumberOfSchedules());
+    }
+
+    @GetMapping("/GetNameOfJourneyById")
+    public ResponseEntity<String> getNameOfJourneyById(@RequestParam Integer journeyId){
+        return ResponseEntity.ok(organizerService.getNameOfJourneyById(journeyId)) ;
+    }
+
+    @DeleteMapping("/DeleteSchedule")
+    public ResponseEntity<Boolean> deleteSchedule(@RequestParam Integer scheduleId){
+        return ResponseEntity.ok(organizerService.deleteSchedule(scheduleId)) ;
     }
 }

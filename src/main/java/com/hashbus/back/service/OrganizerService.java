@@ -9,6 +9,7 @@ import com.hashbus.back.model.Ticket;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -90,4 +91,12 @@ public class OrganizerService {
         return scheduleDAO.getNumberOfSchedules();
     }
 
+    public String getNameOfJourneyById(Integer journeyId){
+        Journey journey = journeyDAO.getJourneyById(journeyId) ;
+        return journey.getName();
+    }
+
+    public Boolean deleteSchedule(Integer scheduleId){
+        return scheduleDAO.deleteSchedule(scheduleId) ;
+    }
 }

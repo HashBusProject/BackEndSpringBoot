@@ -7,6 +7,7 @@ import com.hashbus.back.model.Schedule;
 import com.hashbus.back.model.SearchDataSchedule;
 import lombok.AllArgsConstructor;
 import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.Time;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -102,6 +103,11 @@ public class ScheduleDAO {
     public Integer getNumberOfSchedules() {
         return jdbcTemplate.queryForObject("select count(*) from schedules",
                 Integer.class);
+    }
+
+    public boolean deleteSchedule(Integer scheduleId) {
+        return jdbcTemplate.update("delete from schedules where schedule_id = ?",
+                scheduleId) > 0;
     }
 
 }
