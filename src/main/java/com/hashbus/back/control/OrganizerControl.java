@@ -1,6 +1,7 @@
 package com.hashbus.back.control;
 
 import com.hashbus.back.database.data.access.PointDAO;
+import com.hashbus.back.database.data.access.ScheduleDAO;
 import com.hashbus.back.database.data.access.TicketDAO;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.OrganizerService;
@@ -108,5 +109,21 @@ public class OrganizerControl {
     @DeleteMapping("/DeleteSchedule")
     public ResponseEntity<Boolean> deleteSchedule(@RequestParam Integer scheduleId){
         return ResponseEntity.ok(organizerService.deleteSchedule(scheduleId)) ;
+    }
+
+    @GetMapping("/GetIdOfBuses")
+    public ResponseEntity<List<Integer>> getIdOfBuses(){
+        return ResponseEntity.ok(organizerService.getIdOfBuses());
+    }
+
+    @PostMapping("/AddSchedule")
+    public ResponseEntity<Boolean> addSchedule(@RequestBody Schedule schedule){
+//        Time.valueOf(schedule.getTime().toString());
+        return ResponseEntity.ok(organizerService.addSchedule(schedule)) ;
+    }
+
+    @PutMapping("EditSchedule")
+    public ResponseEntity<Boolean> editSchedule(@RequestBody Schedule schedule){
+        return ResponseEntity.ok(organizerService.editSchedule(schedule)) ;
     }
 }
