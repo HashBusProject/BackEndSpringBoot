@@ -49,5 +49,10 @@ public class BusDAO {
 
     }
 
+    public List<Integer> getIdOfBuses() {
+        return jdbcTemplate.query("select bus_id from buses ",
+                (rs ,  rowNum) -> rs.getInt("bus_id"));
+    }
+
 
 }
