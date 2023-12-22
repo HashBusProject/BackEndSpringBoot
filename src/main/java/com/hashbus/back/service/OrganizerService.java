@@ -30,6 +30,8 @@ public class OrganizerService {
         return null;
     }
 
+
+
     public Journey editJourney(Journey journey) {
         if (journey == null) {
             throw new OrganizerExeption("please insert validate data!!");

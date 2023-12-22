@@ -136,10 +136,9 @@ public class UserService {
 
     public Boolean confirmRide(@NonNull Integer userId, @NonNull Integer journeyId,
                                @NonNull Integer busId, Schedule scheduleId) {
-        if(busId.equals(scheduleId.getBus()) && journeyId.equals(scheduleId.getJourney())){
+        if (busId.equals(scheduleId.getBus()) && journeyId.equals(scheduleId.getJourney())) {
             return ticketDAO.makeTheTicketUsedByUserIdAndJourneyId(userId, journeyId);
-        }
-        else
+        } else
             return false;
     }
 }

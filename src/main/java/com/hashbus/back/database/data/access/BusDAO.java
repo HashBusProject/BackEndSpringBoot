@@ -4,6 +4,7 @@ import com.hashbus.back.database.mappers.BusMapper;
 import com.hashbus.back.model.Bus;
 import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,13 +20,14 @@ public class BusDAO {
         return jdbcTemplate.queryForObject("select * from buses where bus_id = ?", new Object[]{id}, busMapper);
     }
 
-    public List<Bus> getAllBuses(){
+    public List<Bus> getAllBuses() {
         return jdbcTemplate.query("select * from  buses ", busMapper);
 
     }
+
     public boolean insertBus(Bus bus) {
         return jdbcTemplate.update("insert into buses (driver_ID , isWorking ) values (? , ?  )",
-                bus.getDriver().getUserID() ,
+                bus.getDriver().getUserID(),
                 bus.getIsWorking()
         ) > 0;
     }
@@ -36,23 +38,31 @@ public class BusDAO {
         ) > 0;
     }
 
-    public boolean updateBus(Bus bus){
+    public boolean updateBus(Bus bus) {
         return jdbcTemplate.update("update buses set isWorking = ?, driver_ID = ? where bus_id = ?",
-                bus.getIsWorking() ,
+                bus.getIsWorking(),
                 bus.getDriver().getUserID(),
                 bus.getId()
-                ) > 0;
+        ) > 0;
     }
 
     public Integer getNumberOfBuses() {
-        return jdbcTemplate.queryForObject("select count(*) from buses ", Integer.class );
+        return jdbcTemplate.queryForObject("select count(*) from buses ", Integer.class);
+    }
 
+    public Boolean updateLocation(Integer busID, Double x, Double y) {
+        try {
+            return jdbcTemplate.update("""
+                        UPDATE buses SET x_point=?, y_point=? WHERE bus_ID=?
+                    """, x, y, busID) > 1;
+        }
+        catch (EmptyResultDataAccessException e){
+            return false;
+        }
     }
 
     public List<Integer> getIdOfBuses() {
         return jdbcTemplate.query("select bus_id from buses ",
                 (rs ,  rowNum) -> rs.getInt("bus_id"));
     }
-
-
 }
