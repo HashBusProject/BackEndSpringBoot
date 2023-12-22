@@ -23,6 +23,11 @@ public class OrganizerControl {
     private OrganizerService organizerService;
     PointDAO pointDAO;
 
+    @PostMapping("/Login")
+    public ResponseEntity<User> login(@RequestBody User user){
+        return ResponseEntity.ok(organizerService.login(user)) ;
+    }
+
     @PostMapping("/AddJourney")
     public ResponseEntity<Journey> addJourney(@RequestBody Journey journey) {
         Journey journey1 = organizerService.addJourney(journey);
@@ -74,11 +79,11 @@ public class OrganizerControl {
         return ResponseEntity.ok(organizerService.getAllTickets());
     }
 
-    @PostMapping("/AddStopPoint")
-    public ResponseEntity<Boolean> addStopPoint(@RequestParam Integer pointId,
+    @PostMapping("/AddStopPointToJourney")
+    public ResponseEntity<Boolean> addStopPointToJourney(@RequestParam Integer pointId,
                                                 @RequestParam Integer journeyId,
                                                 @RequestParam Integer index) {
-        return ResponseEntity.ok(organizerService.addStopPoint(pointId, journeyId, index));
+        return ResponseEntity.ok(organizerService.addStopPointToJourney(pointId, journeyId, index));
     }
 
     @GetMapping("/GetNameOfPoint")
@@ -125,5 +130,11 @@ public class OrganizerControl {
     @PutMapping("EditSchedule")
     public ResponseEntity<Boolean> editSchedule(@RequestBody Schedule schedule){
         return ResponseEntity.ok(organizerService.editSchedule(schedule)) ;
+    }
+
+    @PostMapping("/AddStopPoint")
+    public ResponseEntity<Point> addStopPoint(@RequestBody Point point) {
+        Point point1 = organizerService.addStopPoint(point);
+        return new ResponseEntity<>(point1, HttpStatus.CREATED);
     }
 }

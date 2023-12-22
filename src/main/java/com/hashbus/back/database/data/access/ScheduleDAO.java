@@ -105,18 +105,20 @@ public class ScheduleDAO {
     }
 
     public Boolean insertSchedule(Schedule schedule) {
-        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time ) values (? , ? , ? )",
+        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time  , date) values (? , ? , ?  , ? )",
                 schedule.getJourney(),
                 schedule.getBus(),
-                schedule.getTime().toString()
+                schedule.getTime().toString(),
+                schedule.getDate()
         ) > 0;
     }
 
     public Boolean editSchedule(Schedule schedule) {
-        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time ) values (? , ? , ? )",
+        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time , date ) values ( ? , ? , ? , ? )",
                 schedule.getJourney(),
                 schedule.getBus(),
-                schedule.getTime().toString()
+                schedule.getTime().toString() ,
+                schedule.getDate()
         ) > 0;
     }
 

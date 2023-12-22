@@ -21,6 +21,22 @@ public class OrganizerService {
     private TicketDAO ticketDAO;
     private PointDAO pointDAO;
 
+    public User login(User user) {
+        User user1 = userDAO.getUserByUsername(user.getUsername());
+        if (user1 == null) {
+            throw new OrganizerExeption("Username name not exist!");
+        } else {
+            if (user.getPassword().equals(user1.getPassword())) {
+                if (user1.getRole() == 3) {
+                    return user1;
+                } else {
+                    throw new OrganizerExeption("You are not organizer");
+                }
+            } else {
+                throw new OrganizerExeption("Wrong password!");
+            }
+        }
+    }
     public Journey addJourney(Journey journey) {
         if (journey == null) {
             throw new OrganizerExeption("please insert validate data!!");
@@ -29,8 +45,6 @@ public class OrganizerService {
             return journey;
         return null;
     }
-
-
 
     public Journey editJourney(Journey journey) {
         if (journey == null) {
@@ -73,8 +87,8 @@ public class OrganizerService {
         return ticketDAO.getAllTickets();
     }
 
-    public Boolean addStopPoint(Integer pointId, Integer journeyId, Integer index) {
-        return journeyDAO.addStopPoint(pointId, journeyId, index);
+    public Boolean addStopPointToJourney(Integer pointId, Integer journeyId, Integer index) {
+        return journeyDAO.addStopPointToJourney(pointId, journeyId, index);
     }
 
     public String getNameOfPoint(Integer pointId) {
@@ -113,6 +127,14 @@ public class OrganizerService {
 
     public Boolean editSchedule(Schedule schedule) {
         return scheduleDAO.editSchedule(schedule);
+    }
+
+    public Point addStopPoint(Point point) {
+        if (pointDAO.insertPoint(point))
+            return point;
+        else {
+            return null;
+        }
     }
 
 }
