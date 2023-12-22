@@ -6,6 +6,8 @@ import com.hashbus.back.model.Journey;
 import com.hashbus.back.model.Schedule;
 import com.hashbus.back.model.SearchDataSchedule;
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.Time;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,8 +24,8 @@ public class ScheduleDAO {
     private UserDAO userDAO;
     private JourneyDAO journeyDAO;
 
-    public HashSet<Schedule> getSchedulesByJourneyId(long journeyId) {
-        return new HashSet<>(jdbcTemplate.query(
+    public List<Schedule> getSchedulesByJourneyId(long journeyId) {
+        return  (jdbcTemplate.query(
                 "select * from schedules where journey_ID = ?",
                 new Object[]{journeyId},
                 scheduleMapper
@@ -90,5 +92,37 @@ public class ScheduleDAO {
         }
     }
 
+    public List<Schedule> getAllSchedule() {
+        try {
+            return jdbcTemplate.query("select * from schedules", scheduleMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
 
+    public Integer getNumberOfSchedules() {
+        return jdbcTemplate.queryForObject("select count(*) from schedules",
+                Integer.class);
+    }
+
+    public boolean deleteSchedule(Integer scheduleId) {
+        return jdbcTemplate.update("delete from schedules where schedule_id = ?",
+                scheduleId) > 0;
+    }
+
+    public Boolean insertSchedule(Schedule schedule) {
+        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time ) values (? , ? , ? )",
+                schedule.getJourney(),
+                schedule.getBus(),
+                schedule.getTime().toString()
+        ) > 0;
+    }
+
+    public Boolean editSchedule(Schedule schedule) {
+        return jdbcTemplate.update("insert into schedules (journey_id , bus_id , time ) values (? , ? , ? )",
+                schedule.getJourney(),
+                schedule.getBus(),
+                schedule.getTime().toString()
+        ) > 0;
+    }
 }
