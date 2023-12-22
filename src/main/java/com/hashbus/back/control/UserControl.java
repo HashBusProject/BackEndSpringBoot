@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.hashbus.back.database.mappers.TicketMapper;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
+import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,7 @@ public class UserControl {
         Point point1 = userService.getPointById(pointId);
         return ResponseEntity.ok(point1);
     }
+
     @GetMapping("/GetJourneyById")
     public ResponseEntity<Journey> getJourneyById(@RequestParam Integer journeyId) {
         Journey journey1 = userService.getJourneyById(journeyId);
@@ -101,8 +103,19 @@ public class UserControl {
     }
 
     @GetMapping("/AllPointByJourneyId")
-    public ResponseEntity<List<Point>> AllPointByJourneyId(@RequestParam Integer journeyId){
+    public ResponseEntity<List<Point>> AllPointByJourneyId(@RequestParam Integer journeyId) {
         List<Point> list = userService.getAllPointByJourneyId(journeyId);
         return ResponseEntity.ok(list);
     }
+
+    @PostMapping("/ConfirmRide")
+    public ResponseEntity<Boolean> confirmRide(
+            @RequestParam("bus") Integer busId,
+            @RequestParam("user") Integer userId,
+            @RequestParam("journey") Integer journeyId,
+            @RequestBody Schedule schedule) {
+        boolean x = userService.confirmRide(userId, journeyId, busId, schedule);
+        return ResponseEntity.ok(x);
+    }
+
 }

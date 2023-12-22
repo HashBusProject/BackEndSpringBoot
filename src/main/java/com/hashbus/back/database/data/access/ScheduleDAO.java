@@ -1,19 +1,13 @@
 package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.ScheduleMapper;
-import com.hashbus.back.model.Bus;
-import com.hashbus.back.model.Journey;
-import com.hashbus.back.model.Schedule;
-import com.hashbus.back.model.SearchDataSchedule;
+import com.hashbus.back.model.*;
 import lombok.AllArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.Time;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Repository
@@ -25,7 +19,7 @@ public class ScheduleDAO {
     private JourneyDAO journeyDAO;
 
     public List<Schedule> getSchedulesByJourneyId(long journeyId) {
-        return  (jdbcTemplate.query(
+        return (jdbcTemplate.query(
                 "select * from schedules where journey_ID = ?",
                 new Object[]{journeyId},
                 scheduleMapper
@@ -124,5 +118,57 @@ public class ScheduleDAO {
                 schedule.getBus(),
                 schedule.getTime().toString()
         ) > 0;
+    }
+
+    public List<DataSchedule> getSchedulesDataByBusId(Integer busId) {
+        try {
+            return jdbcTemplate.query("""
+                            SELECT * from schedules s, journey j where s.finished=0 and s.bus_ID=? order by s.time asc
+                            """,
+                    new Object[]{busId},
+                    (rs -> {
+                        List<DataSchedule> dataSchedules = new ArrayList<>();
+                        while (rs.next()) {
+                            Journey journey = new Journey();
+                            Schedule schedule = new Schedule();
+                            schedule.setBus(rs.getInt("bus_ID"));
+                            schedule.setJourney(rs.getInt("s.journey_ID"));
+                            schedule.setTime(rs.getTime("time"));
+                            schedule.setNextPoint(
+                                    rs.getInt("next_point_index")
+                            );
+                            journey.setId(rs.getInt("j.journey_ID"));
+                            journey.setSourcePoint(rs.getInt("source_point_ID"));
+                            journey.setDestinationPoint(rs.getInt("destination_point_ID"));
+                            journey.setName(rs.getString("journey_name"));
+                            journey.setPrice(rs.getDouble("ticket_price"));
+                            dataSchedules.add(new DataSchedule(journey, schedule));
+                        }
+                        return dataSchedules;
+                    })
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean updateNextPointIndex(Integer scheduleId, Integer previousIndex) {
+        try {
+            return jdbcTemplate.update("""
+                        update schedules set next_point_index=? where schedule_ID=?
+                    """, previousIndex, scheduleId + 1) > 1;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+    public boolean setScheduleFinished(Integer scheduleId) {
+        try {
+            return jdbcTemplate.update("""
+                        UPDATE  scheules SET finished=1 where scheule_ID=?
+                    """, scheduleId) > 1;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.exceptions.LoginException;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,60 +71,74 @@ public class UserService {
     }
 
     public List<SearchDataSchedule> getSearchData(Integer startPointId, Integer endPointId, String time) {
-        if (startPointId == null || endPointId == null || time == null){
+        if (startPointId == null || endPointId == null || time == null) {
             throw new UserException("Wrong Data!!");
         }
         List<SearchDataSchedule> list = scheduleDAO.getScheduleByPointIdsAndTime(startPointId, endPointId, time);
         return list;
     }
-    public List<Journey> getAllJournys(){
+
+    public List<Journey> getAllJournys() {
         List<Journey> journeys = journeyDAO.getAllJourneys();
-        if(journeys.size() == 0 ){
-            throw new UserException("There is no journys") ;
+        if (journeys.size() == 0) {
+            throw new UserException("There is no journys");
         }
         return journeys;
     }
+
     public Point getPointById(Integer id) {
-        if(id == null ){
-            throw new UserException("Wrong Data!") ;
+        if (id == null) {
+            throw new UserException("Wrong Data!");
         }
-        Point point =  pointDAO.getPointById(id) ;
-        return point ;
+        Point point = pointDAO.getPointById(id);
+        return point;
     }
-    public Journey getJourneyById(Integer id){
-        if(id == null ) {
-            throw new UserException("Wrong Data!") ;
+
+    public Journey getJourneyById(Integer id) {
+        if (id == null) {
+            throw new UserException("Wrong Data!");
         }
-        Journey journey = journeyDAO.getJourneyById(id) ;
+        Journey journey = journeyDAO.getJourneyById(id);
         return journey;
     }
-    public Bus getBusById(Integer id){
-        if(id == null){
+
+    public Bus getBusById(Integer id) {
+        if (id == null) {
             throw new UserException("Wrong Data!");
         }
-        return busDAO.getBusById(id) ;
+        return busDAO.getBusById(id);
     }
+
     public List<Ticket> getTicketsByUserId(Integer id) {
-        if(id == null ){
+        if (id == null) {
             throw new UserException("Wrong Data!");
         }
-        List<Ticket> tickets = ticketDAO.getTicketsByUserId(id) ;
+        List<Ticket> tickets = ticketDAO.getTicketsByUserId(id);
         return tickets;
     }
-    public Boolean buyTicket(Integer userId , Integer journeyId ) {
-        if(userId == null || journeyId == null) {
-            throw new UserException("Wrong Data!") ;
+
+    public Boolean buyTicket(Integer userId, Integer journeyId) {
+        if (userId == null || journeyId == null) {
+            throw new UserException("Wrong Data!");
         }
-        return ticketDAO.buyTicket(userId , journeyId) ;
+        return ticketDAO.buyTicket(userId, journeyId);
     }
 
     public List<Point> getAllPointByJourneyId(Integer journeyId) {
         List<Point> points = new ArrayList<>();
         points.add(pointDAO.getPointById(journeyDAO.getSourcePointForJourneyById(journeyId)));
-        for (Integer pointId: journeyDAO.getStopPointsForJourneyById(journeyId)) {
+        for (Integer pointId : journeyDAO.getStopPointsForJourneyById(journeyId)) {
             points.add(pointDAO.getPointById(pointId));
         }
         points.add(pointDAO.getPointById(journeyDAO.getDestinationPointForJourneyById(journeyId)));
         return points;
+    }
+
+    public Boolean confirmRide(@NonNull Integer userId, @NonNull Integer journeyId,
+                               @NonNull Integer busId, Schedule scheduleId) {
+        if (busId.equals(scheduleId.getBus()) && journeyId.equals(scheduleId.getJourney())) {
+            return ticketDAO.makeTheTicketUsedByUserIdAndJourneyId(userId, journeyId);
+        } else
+            return false;
     }
 }

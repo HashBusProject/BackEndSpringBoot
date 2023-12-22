@@ -25,6 +25,8 @@ public class ScheduleMapper implements RowMapper<Schedule> {
                 Time.valueOf(rs.getString("time"))
         );
         schedule.setPassengersNumber(rs.getInt("passengers_number"));
+        schedule.setDate(rs.getDate("date"));
+        schedule.setFinished(rs.getInt("finished") == 1);
         return schedule;
     }
 }
