@@ -116,7 +116,7 @@ public class JourneyDAO {
         }
     }
 
-    public Boolean addStopPoint(Integer pointId, Integer journeyId, Integer index) {
+    public Boolean addStopPointToJourney(Integer pointId, Integer journeyId, Integer index) {
         try {
             return jdbcTemplate.update(
                     "INSERT INTO stop_points_for_journey (journey_id, point_id, `index`) VALUES (?, ?, ?)",
