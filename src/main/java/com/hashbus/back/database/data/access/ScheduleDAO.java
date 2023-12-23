@@ -123,7 +123,9 @@ public class ScheduleDAO {
     public List<DataSchedule> getSchedulesDataByBusId(Integer busId) {
         try {
             return jdbcTemplate.query("""
-                            SELECT * from schedules s, journey j where s.finished=0 and s.bus_ID=? order by s.time asc
+                            SELECT * from schedules s, journeys j
+                            where s.finished=0 and s.bus_ID=? and s.journey_ID=j.journey_ID
+                            order by s.time asc
                             """,
                     new Object[]{busId},
                     (rs -> {
