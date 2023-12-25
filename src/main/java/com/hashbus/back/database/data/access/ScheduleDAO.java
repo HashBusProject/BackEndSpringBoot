@@ -138,6 +138,7 @@ public class ScheduleDAO {
                             schedule.setBus(rs.getInt("bus_ID"));
                             schedule.setJourney(rs.getInt("s.journey_ID"));
                             schedule.setTime(rs.getTime("time"));
+                            schedule.setScheduleId(rs.getInt("schedule_ID"));
                             schedule.setNextPoint(
                                     rs.getInt("next_point_index")
                             );
@@ -160,8 +161,9 @@ public class ScheduleDAO {
         try {
             return jdbcTemplate.update("""
                         update schedules set next_point_index=? where schedule_ID=?
-                    """, previousIndex, scheduleId + 1) > 1;
+                    """, previousIndex + 1, scheduleId) > 0;
         } catch (EmptyResultDataAccessException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -169,8 +171,8 @@ public class ScheduleDAO {
     public boolean setScheduleFinished(Integer scheduleId) {
         try {
             return jdbcTemplate.update("""
-                        UPDATE  scheules SET finished=1 where scheule_ID=?
-                    """, scheduleId) > 1;
+                        UPDATE schedules SET finished=1 where schedule_ID=?
+                    """, scheduleId) > 0;
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
