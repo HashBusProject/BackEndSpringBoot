@@ -5,6 +5,7 @@ import com.hashbus.back.database.data.access.ScheduleDAO;
 import com.hashbus.back.database.data.access.TicketDAO;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.OrganizerService;
+import com.hashbus.back.service.UserService;
 import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,8 @@ import java.util.List;
 @RequestMapping("/Organizer")
 public class OrganizerControl {
     private OrganizerService organizerService;
-    PointDAO pointDAO;
+    private UserService userService ;
+
 
     @PostMapping("/Login")
     public ResponseEntity<User> login(@RequestBody User user){
@@ -136,5 +138,10 @@ public class OrganizerControl {
     public ResponseEntity<Point> addStopPoint(@RequestBody Point point) {
         Point point1 = organizerService.addStopPoint(point);
         return new ResponseEntity<>(point1, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/GetStopPointOfJourney")
+    public ResponseEntity<List<Point>> getStopPointOfJourney(@RequestParam Integer journeyId){
+        return ResponseEntity.ok(userService.getAllPointByJourneyId(journeyId)) ;
     }
 }
