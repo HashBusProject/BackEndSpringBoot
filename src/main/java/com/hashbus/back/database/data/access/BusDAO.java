@@ -50,11 +50,11 @@ public class BusDAO {
         return jdbcTemplate.queryForObject("select count(*) from buses ", Integer.class);
     }
 
-    public Boolean updateLocation(Integer busID, Double x, Double y) {
+    public Boolean updateLocation(Integer busID, Double latitude, Double longitude) {
         try {
             return jdbcTemplate.update("""
-                        UPDATE buses SET x_point=?, y_point=? WHERE bus_ID=?
-                    """, x, y, busID) > 1;
+                    UPDATE buses SET x_point=?, y_point=? WHERE bus_ID=?
+                    """, latitude, longitude, busID) > 0;
         }
         catch (EmptyResultDataAccessException e){
             return false;

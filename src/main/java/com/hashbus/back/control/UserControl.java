@@ -2,6 +2,7 @@ package com.hashbus.back.control;
 
 import com.google.gson.Gson;
 import com.hashbus.back.database.mappers.TicketMapper;
+import com.hashbus.back.exceptions.TripException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
 import jnr.ffi.annotations.In;
@@ -116,6 +117,24 @@ public class UserControl {
             @RequestBody Schedule schedule) {
         boolean x = userService.confirmRide(userId, journeyId, busId, schedule);
         return ResponseEntity.ok(x);
+    }
+
+    @PostMapping("/ReserveASite")
+    public ResponseEntity<Boolean> reserveASite(@RequestParam Integer scheduleID) {
+        try {
+            return ResponseEntity.ok(userService.reserveASite(scheduleID));
+        } catch (TripException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).body(false);
+        }
+    }
+
+    @PostMapping("/CancelReserve")
+    public ResponseEntity<Boolean> cancelReserve(@RequestParam Integer scheduleID) {
+        try {
+            return ResponseEntity.ok(userService.cancelASite(scheduleID));
+        } catch (TripException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).body(false);
+        }
     }
 
 }
