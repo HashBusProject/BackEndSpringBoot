@@ -1,14 +1,19 @@
 package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.UserMapper;
+import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Repository
@@ -27,6 +32,27 @@ public class UserDAO {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public UserDetails findUserByUsername(String username) {
+        User user = getUserByUsername(username);
+        org.springframework.security.core.userdetails.User user1 = null;
+        try {
+            user1 =
+                    new org.springframework.security.core.userdetails.User(
+                            username, user.getPassword(),
+                            Collections.singleton(new SimpleGrantedAuthority(
+                                            user.getRole() == 1 ? "Student" :
+                                                    user.getRole() == 2 ? "Driver" :
+                                                            user.getRole() == 3 ? "Organizer" :
+                                                                    "Admin"
+                                    )
+                            )
+                    );
+        } catch (Exception e) {
+            throw new UserException("User Not Found!");
+        }
+        return user1;
     }
 
     public User getUserById(long id) {
@@ -82,19 +108,22 @@ public class UserDAO {
                 "update users set password = ? where username=?;",
                 user.getPassword(), user.getUsername());
     }
+
     public int editUser(User user) {
         return jdbcTemplate.update(
-        "update users set email = ? , username = ? , name = ? where user_id=?;",
-                user.getPassword(), user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
+                "update users set email = ? , username = ? , name = ? where user_id=?;",
+                user.getPassword(), user.getEmail(), user.getUsername(), user.getName(), user.getUserID());
     }
-    public int getNumberOfUserByRole(int role){
+
+    public int getNumberOfUserByRole(int role) {
         return jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM users WHERE rule_type_Id = ?",
                 new Object[]{role},
                 Integer.class
         );
     }
+
     public Integer getNumberOfUser() {
-        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
+        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
     }
 }

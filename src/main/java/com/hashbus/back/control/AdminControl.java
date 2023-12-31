@@ -57,7 +57,7 @@ public class AdminControl {
     }
 
     @GetMapping("/GetUser")
-    public ResponseEntity<List<User>> getUser(@RequestParam int role) {
+    public ResponseEntity<List<User>> getUser(@RequestParam Integer role) {
         List<User> user = adminService.getUser(role);
         return ResponseEntity.ok(user);
     }
