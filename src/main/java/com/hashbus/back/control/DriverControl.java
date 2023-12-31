@@ -18,25 +18,34 @@ import java.util.List;
 public class DriverControl {
     private DriverService driverService;
     private UserService userService;
+
     @GetMapping("/GetScheduleData")
-    public ResponseEntity<List<DataSchedule>> getDataSchedulesByBusId(@RequestParam Integer busId){
+    public ResponseEntity<List<DataSchedule>> getDataSchedulesByBusId(@RequestParam Integer busId) {
         return ResponseEntity.ok(driverService.getSchedulesByBusId(busId));
     }
 
     @GetMapping("/GetAllPointsForJourney")
-    public ResponseEntity<List<Point>> getAllPointsForJourney(@RequestParam Integer journeyId){
+    public ResponseEntity<List<Point>> getAllPointsForJourney(@RequestParam Integer journeyId) {
         return ResponseEntity.ok(userService.getAllPointByJourneyId(journeyId));
     }
 
     @PostMapping("/UpdateNextPointIndex")
     public ResponseEntity<Boolean> updateNextPointIndexByScheduleId(
             @RequestParam Integer scheduleId,
-            @RequestParam Integer previousIndex){
+            @RequestParam Integer previousIndex) {
         return ResponseEntity.ok(driverService.updateNextPointIndexByScheduleId(scheduleId, previousIndex));
     }
 
     @PostMapping("/setScheduleAsFinished")
-    public ResponseEntity<Boolean> setScheduleAsFinished(@RequestParam Integer scheduleId){
+    public ResponseEntity<Boolean> setScheduleAsFinished(@RequestParam Integer scheduleId) {
         return ResponseEntity.ok(driverService.setScheduleAsFinish(scheduleId));
+    }
+
+    @PostMapping("/UpdateLocation")
+    public ResponseEntity<Boolean> updateLocation(
+            @RequestParam Integer busId,
+            @RequestParam Double latitude,
+            @RequestParam Double longitude) {
+        return ResponseEntity.ok(driverService.updateLocation(busId, latitude, longitude));
     }
 }

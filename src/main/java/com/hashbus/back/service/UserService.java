@@ -141,4 +141,15 @@ public class UserService {
         } else
             return false;
     }
+
+    public Boolean reserveASite(@NonNull Integer scheduleId) {
+        Schedule schedule = scheduleDAO.getScheduleById(scheduleId);
+        return scheduleDAO.updatePassengerNumber(scheduleId, schedule.getPassengersNumber() + 1);
+    }
+
+    public Boolean cancelASite(@NonNull Integer scheduleId) {
+        Schedule schedule = scheduleDAO.getScheduleById(scheduleId);
+        return scheduleDAO.updatePassengerNumber(scheduleId, schedule.getPassengersNumber() - 1);
+
+    }
 }

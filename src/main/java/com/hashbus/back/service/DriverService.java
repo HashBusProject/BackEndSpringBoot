@@ -43,4 +43,8 @@ public class DriverService {
     public Boolean setScheduleAsFinish(Integer scheduleId) {
         return scheduleDAO.setScheduleFinished(scheduleId);
     }
+
+    public Boolean updateLocation(Integer busId, Double latitude, Double longitude) {
+        return busDAO.updateLocation(busId, latitude, longitude);
+    }
 }

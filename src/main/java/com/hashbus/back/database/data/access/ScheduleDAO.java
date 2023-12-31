@@ -1,6 +1,7 @@
 package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.ScheduleMapper;
+import com.hashbus.back.exceptions.TripException;
 import com.hashbus.back.model.*;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,7 +38,7 @@ public class ScheduleDAO {
                                     WHERE s.time >= ? and b.working = 1
                                       AND (
                                             (j.source_point_ID = ?
-                                                OR EXISTS (SELECT *\s
+                                                OR EXISTS (SELECT *
                                                            FROM stop_points_for_journey spj
                                                            WHERE spj.journey_ID = j.journey_ID
                                                              AND spj.point_ID = ?
@@ -56,6 +57,7 @@ public class ScheduleDAO {
                             Schedule schedule = new Schedule();
                             Journey journey = new Journey();
                             Bus bus = new Bus();
+                            schedule.setScheduleId(rs.getInt("schedule_ID"));
                             schedule.setBus(rs.getInt("s.bus_ID"));
                             schedule.setJourney(rs.getInt("s.journey_ID"));
                             schedule.setTime(rs.getTime("time"));
@@ -63,6 +65,7 @@ public class ScheduleDAO {
                                     rs.getInt("next_point_index")
                             );
                             schedule.setPassengersNumber(rs.getInt("passengers_number"));
+                            schedule.setFinished(rs.getInt("finished") == 1);
                             journey.setId(rs.getInt("j.journey_ID"));
                             journey.setSourcePoint(rs.getInt("source_point_ID"));
                             journey.setDestinationPoint(rs.getInt("destination_point_ID"));
@@ -77,6 +80,7 @@ public class ScheduleDAO {
                             bus.setY(rs.getDouble("y_point"));
                             bus.setCap(rs.getInt("capacity"));
                             list.add(new SearchDataSchedule(journey, schedule, bus));
+                            System.out.println(list);
                         }
                         return list;
                     }
@@ -126,7 +130,9 @@ public class ScheduleDAO {
     public List<DataSchedule> getSchedulesDataByBusId(Integer busId) {
         try {
             return jdbcTemplate.query("""
-                            SELECT * from schedules s, journey j where s.finished=0 and s.bus_ID=? order by s.time asc
+                            SELECT * from schedules s, journeys j
+                            where s.finished=0 and s.bus_ID=? and s.journey_ID=j.journey_ID
+                            order by s.time asc
                             """,
                     new Object[]{busId},
                     (rs -> {
@@ -137,6 +143,7 @@ public class ScheduleDAO {
                             schedule.setBus(rs.getInt("bus_ID"));
                             schedule.setJourney(rs.getInt("s.journey_ID"));
                             schedule.setTime(rs.getTime("time"));
+                            schedule.setScheduleId(rs.getInt("schedule_ID"));
                             schedule.setNextPoint(
                                     rs.getInt("next_point_index")
                             );
@@ -159,8 +166,9 @@ public class ScheduleDAO {
         try {
             return jdbcTemplate.update("""
                         update schedules set next_point_index=? where schedule_ID=?
-                    """, previousIndex, scheduleId + 1) > 1;
+                    """, previousIndex + 1, scheduleId) > 0;
         } catch (EmptyResultDataAccessException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -168,8 +176,8 @@ public class ScheduleDAO {
     public boolean setScheduleFinished(Integer scheduleId) {
         try {
             return jdbcTemplate.update("""
-                    UPDATE  scheules SET finished=1 where scheule_ID=?
-                    """, scheduleId) > 1;
+                        UPDATE schedules SET finished=1 where schedule_ID=?
+                    """, scheduleId) > 0;
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
@@ -209,5 +217,27 @@ public class ScheduleDAO {
                 return new HashMap<>();
             }
         });
+    }
+}
+    public Schedule getScheduleById(Integer scheduleId) {
+        try {
+            return jdbcTemplate.queryForObject("""
+                    SELECT * from schedules where schedule_ID=?
+                    """, new Object[]{scheduleId}, scheduleMapper);
+        } catch (EmptyResultDataAccessException e) {
+            throw new TripException(String.format("Trip with ID: %d does not exists", scheduleId));
+        }
+    }
+
+    public Boolean updatePassengerNumber(Integer scheduleId, Integer newPassengersNumber) {
+        try {
+            return jdbcTemplate.update("""
+                            UPDATE schedules set passengers_number=? WHERE schedule_ID=?
+                            """,
+                    newPassengersNumber,
+                    scheduleId) > 0;
+        } catch (EmptyResultDataAccessException e) {
+            throw new TripException(String.format("Trip with ID: %d does not exists", scheduleId));
+        }
     }
 }
