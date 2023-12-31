@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -138,5 +136,11 @@ public class OrganizerService {
         }
     }
 
+    public List<Map<String , Object>> getSumOfPassengerNumber(){
+        return scheduleDAO.getSumOfPassengerNumber();
+    }
 
+    public Map<String , Object> getTheTopJourney() {
+        return scheduleDAO.getTheTopJourney();
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Time;
 import java.util.*;
 
 @AllArgsConstructor
@@ -182,6 +183,42 @@ public class ScheduleDAO {
         }
     }
 
+    public List<Map<String, Object>> getSumOfPassengerNumber() {
+        return jdbcTemplate.query("SELECT date, SUM(passengers_number) AS total_passengers FROM schedules GROUP BY date", rs -> {
+            List<Map<String, Object>> resultList = new ArrayList<>();
+            while (rs.next()) {
+                String date = rs.getString("date");
+                int totalPassengers = rs.getInt("total_passengers");
+                Map<String, Object> map = new HashMap<>();
+                map.put("date", date);
+                map.put("totalPassenger", totalPassengers);
+
+                resultList.add(map);
+            }
+            return resultList;
+        });
+    }
+
+    public Map<String, Object> getTheTopJourney() {
+        return jdbcTemplate.query("SELECT journey_id, SUM(passengers_number) AS total_passengers " +
+                "FROM schedules " +
+                "GROUP BY journey_id " +
+                "ORDER BY total_passengers DESC " +
+                "LIMIT 1", rs -> {
+            if (rs.next()) {
+                int journeyId = rs.getInt("journey_id");
+                String journeyName = journeyDAO.getJourneyById(journeyId).getName();
+                int totalPassengers = rs.getInt("total_passengers");
+                Map<String, Object> map = new HashMap<>();
+                map.put("journeyName", journeyName);
+                map.put("totalPassenger", totalPassengers);
+                return map;
+            } else {
+                return new HashMap<>();
+            }
+        });
+    }
+}
     public Schedule getScheduleById(Integer scheduleId) {
         try {
             return jdbcTemplate.queryForObject("""

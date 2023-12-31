@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -143,5 +144,15 @@ public class OrganizerControl {
     @GetMapping("/GetStopPointOfJourney")
     public ResponseEntity<List<Point>> getStopPointOfJourney(@RequestParam Integer journeyId){
         return ResponseEntity.ok(userService.getAllPointByJourneyId(journeyId)) ;
+    }
+
+    @GetMapping("/GetSumOfPassengerNumber")
+    public ResponseEntity<List<Map<String , Object>>> getSumOfPassengerNumber(){
+        return ResponseEntity.ok(organizerService.getSumOfPassengerNumber()) ;
+    }
+
+    @GetMapping("/GetTheTopJourney")
+    public ResponseEntity<Map<String , Object> > getTheTopJourney(){
+        return ResponseEntity.ok(organizerService.getTheTopJourney());
     }
 }
