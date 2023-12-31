@@ -218,7 +218,7 @@ public class ScheduleDAO {
             }
         });
     }
-}
+
     public Schedule getScheduleById(Integer scheduleId) {
         try {
             return jdbcTemplate.queryForObject("""
