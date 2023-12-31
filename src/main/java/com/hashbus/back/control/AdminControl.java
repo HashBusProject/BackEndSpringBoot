@@ -29,7 +29,6 @@ public class AdminControl {
         return new ResponseEntity<>(user1, HttpStatus.CREATED);
     }
 
-    // This is Done
     @PostMapping("/DeleteUser")
     public ResponseEntity<Integer> deleteUser(@RequestBody User user) {
         int id1 = adminService.deleteUser(user.getUserID());
