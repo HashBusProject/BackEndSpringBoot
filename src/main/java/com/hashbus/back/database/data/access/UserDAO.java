@@ -84,8 +84,8 @@ public class UserDAO {
     }
     public int editUser(User user) {
         return jdbcTemplate.update(
-        "update users set password = ? , email = ? , username = ? , name = ? where user_id=?;",
-                user.getPassword(), user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
+        "update users set  email = ? , username = ? , name = ? where user_id=?;",
+                 user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
     }
     public int getNumberOfUserByRole(int role){
         return jdbcTemplate.queryForObject(
