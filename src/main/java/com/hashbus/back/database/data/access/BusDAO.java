@@ -55,14 +55,25 @@ public class BusDAO {
             return jdbcTemplate.update("""
                     UPDATE buses SET x_point=?, y_point=? WHERE bus_ID=?
                     """, latitude, longitude, busID) > 0;
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return false;
         }
     }
 
     public List<Integer> getIdOfBuses() {
         return jdbcTemplate.query("select bus_id from buses ",
-                (rs ,  rowNum) -> rs.getInt("bus_id"));
+                (rs, rowNum) -> rs.getInt("bus_id"));
+    }
+
+    public Bus getBusByDriverID(Integer userID) {
+        try {
+            return jdbcTemplate.queryForObject("""
+                                SELECT * FROM buses WHERE driver_ID=?
+                            """,
+                    new Object[]{userID},
+                    busMapper);
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 }

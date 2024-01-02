@@ -150,6 +150,18 @@ public class UserService {
     public Boolean cancelASite(@NonNull Integer scheduleId) {
         Schedule schedule = scheduleDAO.getScheduleById(scheduleId);
         return scheduleDAO.updatePassengerNumber(scheduleId, schedule.getPassengersNumber() - 1);
+    }
 
+    public DriverData loginForDriver(@NonNull User user){
+        if(user.getUsername() == null)
+            throw new UserException("Wrong username or password");
+        User authUser = userDAO.getUserByUsername(user.getUsername());
+        if(authUser == null)
+            throw new UserException("User Not Found!");
+        if(!authUser.getPassword().equals(user.getPassword()))
+            throw new UserException("Wrong username or password");
+        Bus bus = busDAO.getBusByDriverID(authUser.getUserID());
+        authUser.setPassword(null);
+        return new DriverData(authUser, bus);
     }
 }
