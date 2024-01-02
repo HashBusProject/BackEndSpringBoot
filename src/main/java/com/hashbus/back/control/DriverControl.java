@@ -1,5 +1,9 @@
 package com.hashbus.back.control;
 
+import com.hashbus.back.model.DataSchedule;
+import com.hashbus.back.model.Point;
+import com.hashbus.back.model.Schedule;
+import com.hashbus.back.model.User;
 import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.DriverService;
@@ -53,4 +57,12 @@ public class DriverControl {
         return ResponseEntity.ok(driverService.updateLocation(busId, latitude, longitude));
     }
 
+    @PutMapping("/ChangePassword")
+    public ResponseEntity<Boolean> changePassword(@RequestBody User user) {
+        User result = userService.changePassword(user);
+        if(result != null)
+            return ResponseEntity.ok(true);
+
+        return ResponseEntity.ok(false);
+    }
 }

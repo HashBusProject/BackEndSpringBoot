@@ -23,11 +23,20 @@ public class AdminService {
     private BusDAO busDAO;
 
     public User addUser(User user) {
+        User user1 = userDAO.getUserByUsername(user.getUsername());
+        if (user1 != null) {
+            throw new AdminException("This username already exist");
+        }
+        user1 = userDAO.getUserByEmail(user.getEmail());
+        if (user1 != null) {
+            throw new AdminException("This email already exist");
+        }
         if (userDAO.insertUser(user))
             return user;
         else {
             return null;
         }
+
     }
 
     public int deleteUser(int id) {
