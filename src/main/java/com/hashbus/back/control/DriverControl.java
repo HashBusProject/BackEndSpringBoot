@@ -3,6 +3,7 @@ package com.hashbus.back.control;
 import com.hashbus.back.model.DataSchedule;
 import com.hashbus.back.model.Point;
 import com.hashbus.back.model.Schedule;
+import com.hashbus.back.model.User;
 import com.hashbus.back.service.DriverService;
 import com.hashbus.back.service.UserService;
 import jnr.ffi.annotations.In;
@@ -47,5 +48,14 @@ public class DriverControl {
             @RequestParam Double latitude,
             @RequestParam Double longitude) {
         return ResponseEntity.ok(driverService.updateLocation(busId, latitude, longitude));
+    }
+
+    @PutMapping("/ChangePassword")
+    public ResponseEntity<Boolean> changePassword(@RequestBody User user) {
+        User result = userService.changePassword(user);
+        if(result != null)
+            return ResponseEntity.ok(true);
+
+        return ResponseEntity.ok(false);
     }
 }
