@@ -2,6 +2,7 @@ package com.hashbus.back.service;
 
 import com.hashbus.back.database.data.access.*;
 import com.hashbus.back.exceptions.LoginException;
+import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.DataSchedule;
 import com.hashbus.back.model.User;
 import lombok.AllArgsConstructor;
@@ -49,9 +50,13 @@ public class DriverService {
     }
 
     public boolean changeEmail(User user) {
-        if (userDAO.changeEmail(user)) {
-            return true;
+        User user1 = userDAO.getUserByEmail(user.getEmail());
+        if(user1 != null){
+            throw new UserException("This email already exist") ;
         }
-        return false;
+        if (!(userDAO.getUserById(user.getUserID()).getPassword().equals(user.getPassword()))) {
+            throw new UserException("Email does not match!");
+        }
+        return userDAO.changeEmail(user) == Boolean.TRUE ;
     }
 }

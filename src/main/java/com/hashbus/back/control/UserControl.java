@@ -130,5 +130,14 @@ public class UserControl {
             return ResponseEntity.badRequest().header("message", e.getMessage()).body(false);
         }
     }
+    @PutMapping("/ChangeEmail")
+    public ResponseEntity<Boolean> changeEmail(@RequestBody User user){
+        return ResponseEntity.ok(userService.changeEmail(user)) ;
+    }
+
+    @GetMapping("/GetSchedule")
+    public ResponseEntity<Schedule> getSchedule(@RequestParam Integer scheduleId){
+        return ResponseEntity.ok(userService.getSchedule(scheduleId));
+    }
 
 }

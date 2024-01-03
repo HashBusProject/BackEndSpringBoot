@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -170,8 +167,26 @@ public class UserService {
         if (result == null) {
             throw new UserException("User Not Found!!");
         }
-        result.setPassword(changePassword.getUser().getPassword());
+        if (!(result.getPassword().equals(changePassword.getUser().getPassword()))) {
+            throw new UserException("Password does not right");
+        }
+        result.setPassword(changePassword.getNewPassword());
         if (userDAO.update(result) == 1) return true;
         return false;
+    }
+
+    public Boolean changeEmail(User user) {
+        User user1 = userDAO.getUserByEmail(user.getEmail());
+        if(user1 != null){
+            throw new UserException("This email already exist") ;
+        }
+         if (!(userDAO.getUserById(user.getUserID()).getPassword().equals(user.getPassword()))) {
+            throw new UserException("Email does not match!");
+        }
+        return userDAO.changeEmail(user) == Boolean.TRUE;
+    }
+
+    public Schedule getSchedule(Integer scheduleId) {
+        return scheduleDAO.getScheduleById(scheduleId);
     }
 }
