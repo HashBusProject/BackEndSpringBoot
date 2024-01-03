@@ -1,8 +1,10 @@
 package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.UserMapper;
+import com.hashbus.back.model.ChangePassword;
 import com.hashbus.back.model.User;
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -97,4 +99,5 @@ public class UserDAO {
     public Integer getNumberOfUser() {
         return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
     }
+
 }

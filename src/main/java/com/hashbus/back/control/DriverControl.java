@@ -2,13 +2,10 @@ package com.hashbus.back.control;
 
 import com.hashbus.back.model.DataSchedule;
 import com.hashbus.back.model.Point;
-import com.hashbus.back.model.Schedule;
 import com.hashbus.back.model.User;
-import com.hashbus.back.exceptions.UserException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.DriverService;
 import com.hashbus.back.service.UserService;
-import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,11 +55,10 @@ public class DriverControl {
     }
 
     @PutMapping("/ChangePassword")
-    public ResponseEntity<Boolean> changePassword(@RequestBody User user) {
-        User result = userService.changePassword(user);
-        if(result != null)
-            return ResponseEntity.ok(true);
-
+    public ResponseEntity<Boolean> changePassword(@RequestBody  ChangePassword changePassword) {
+        if(userService.changePassword(changePassword)) {
+                return ResponseEntity.ok(true);
+        }
         return ResponseEntity.ok(false);
     }
 }

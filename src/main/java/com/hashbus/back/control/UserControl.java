@@ -1,18 +1,12 @@
 package com.hashbus.back.control;
 
-import com.google.gson.Gson;
-import com.hashbus.back.database.mappers.TicketMapper;
 import com.hashbus.back.exceptions.TripException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
-import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +42,7 @@ public class UserControl {
 
     @PutMapping("/ChangePassword")
     public ResponseEntity<User> changePassword(@RequestBody User user) {
-        User result = userService.changePassword(user);
+        User result = userService.forgetPassword(user);
         return ResponseEntity.ok(result);
     }
 

@@ -6,6 +6,7 @@ import com.hashbus.back.model.*;
 import com.hashbus.back.exceptions.LoginException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class UserService {
         }
     }
 
-    public User changePassword(User user) {
+    public User forgetPassword(User user) {
         User result = userDAO.getUserByEmail(user.getEmail());
         if (result == null) {
             throw new UserException("User Not Found!!");
@@ -163,5 +164,15 @@ public class UserService {
         Bus bus = busDAO.getBusByDriverID(authUser.getUserID());
         authUser.setPassword(null);
         return new DriverData(authUser, bus);
+    }
+
+    public Boolean changePassword(ChangePassword changePassword) {
+        User result = userDAO.getUserByEmail(changePassword.getUser().getEmail());
+        if (result == null) {
+            throw new UserException("User Not Found!!");
+        }
+        result.setPassword(changePassword.getUser().getPassword());
+        if (userDAO.update(result) == 1) return true;
+        return false;
     }
 }
