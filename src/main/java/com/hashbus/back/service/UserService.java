@@ -22,8 +22,8 @@ public class UserService {
     private BusDAO busDAO;
 
     public User login(User user) throws LoginException {
-        System.out.println(user);
         User user1 = userDAO.getUserByUsername(user.getUsername());
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (user1 == null) {
             throw new LoginException("Wrong Username!!");
         } else if (!user.getUsername().equals(user1.getUsername()) || !user1.getPassword().equals(user.getPassword())) {
@@ -163,7 +163,7 @@ public class UserService {
     }
 
     public Boolean changePassword(ChangePassword changePassword) {
-        User result = userDAO.getUserByEmail(changePassword.getUser().getEmail());
+        User result = userDAO.getUserById(changePassword.getUser().getUserID());
         if (result == null) {
             throw new UserException("User Not Found!!");
         }

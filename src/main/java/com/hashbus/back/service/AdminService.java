@@ -31,6 +31,7 @@ public class AdminService {
         if (user1 != null) {
             throw new AdminException("This email already exist");
         }
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (userDAO.insertUser(user))
             return user;
         else {

@@ -21,6 +21,7 @@ public class DriverService {
 
     public User login(User user) throws LoginException {
         User user1 = userDAO.getUserByUsername(user.getUsername());
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (user1 == null) {
             throw new LoginException("Wrong Username!!");
         } else if (!user.getUsername().equals(user1.getUsername()) || !user1.getPassword().equals(user.getPassword())) {
@@ -50,10 +51,11 @@ public class DriverService {
     }
 
     public boolean changeEmail(User user) {
-        User user1 = userDAO.getUserByEmail(user.getEmail());
+        User user1 = userDAO.getUserById(user.getUserID());
         if(user1 != null){
             throw new UserException("This email already exist") ;
         }
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (!(userDAO.getUserById(user.getUserID()).getPassword().equals(user.getPassword()))) {
             throw new UserException("Email does not match!");
         }
