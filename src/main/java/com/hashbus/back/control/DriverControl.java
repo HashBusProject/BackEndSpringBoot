@@ -56,8 +56,16 @@ public class DriverControl {
 
     @PutMapping("/ChangePassword")
     public ResponseEntity<Boolean> changePassword(@RequestBody ChangePassword changePassword) {
-        if(userService.changePassword(changePassword)) {
-                return ResponseEntity.ok(true);
+        if (userService.changePassword(changePassword)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
+    }
+
+    @PutMapping("/ChangeEmail")
+    public ResponseEntity<Boolean> changeEmail(@RequestBody User user) {
+        if (driverService.changeEmail(user)) {
+            return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);
     }

@@ -84,20 +84,29 @@ public class UserDAO {
                 "update users set password = ? where username=?;",
                 user.getPassword(), user.getUsername());
     }
+
     public int editUser(User user) {
         return jdbcTemplate.update(
-        "update users set  email = ? , username = ? , name = ? where user_id=?;",
-                 user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
+                "update users set  email = ? , username = ? , name = ? where user_id=?;",
+                user.getEmail(), user.getUsername(), user.getName(), user.getUserID());
     }
-    public int getNumberOfUserByRole(int role){
+
+    public int getNumberOfUserByRole(int role) {
         return jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM users WHERE rule_type_Id = ?",
                 new Object[]{role},
                 Integer.class
         );
     }
+
     public Integer getNumberOfUser() {
-        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
+        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
+    }
+
+    public Boolean changeEmail(User user) {
+        return jdbcTemplate.update("update users set email = ? where username = ? ",
+                user.getEmail(),
+                user.getUsername()) > 0;
     }
 
 }

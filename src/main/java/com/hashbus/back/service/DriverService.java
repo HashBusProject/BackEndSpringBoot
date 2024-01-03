@@ -29,8 +29,8 @@ public class DriverService {
         return user1;
     }
 
-    public List<DataSchedule> getSchedulesByBusId(Integer busId){
-        if(busId == null){
+    public List<DataSchedule> getSchedulesByBusId(Integer busId) {
+        if (busId == null) {
             throw new RuntimeException("");
         }
         return scheduleDAO.getSchedulesDataByBusId(busId);
@@ -46,5 +46,12 @@ public class DriverService {
 
     public Boolean updateLocation(Integer busId, Double latitude, Double longitude) {
         return busDAO.updateLocation(busId, latitude, longitude);
+    }
+
+    public boolean changeEmail(User user) {
+        if (userDAO.changeEmail(user)) {
+            return true;
+        }
+        return false;
     }
 }

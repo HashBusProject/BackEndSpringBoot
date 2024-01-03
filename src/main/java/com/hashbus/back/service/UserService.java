@@ -6,7 +6,6 @@ import com.hashbus.back.model.*;
 import com.hashbus.back.exceptions.LoginException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
