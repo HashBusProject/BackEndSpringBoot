@@ -51,7 +51,7 @@ public class UserService {
         if (result == null) {
             throw new UserException("User Not Found!!");
         }
-        result.setPassword(user.getPassword());
+        result.setPassword(Encryption.encrypt(user.getPassword()));
         if (userDAO.update(result) == 1) return result;
         return null;
     }
@@ -149,13 +149,14 @@ public class UserService {
         return scheduleDAO.updatePassengerNumber(scheduleId, schedule.getPassengersNumber() - 1);
     }
 
-    public DriverData loginForDriver(@NonNull User user){
-        if(user.getUsername() == null)
+    public DriverData loginForDriver(@NonNull User user) {
+        if (user.getUsername() == null)
             throw new UserException("Wrong username or password");
         User authUser = userDAO.getUserByUsername(user.getUsername());
-        if(authUser == null)
+        user.setPassword(Encryption.encrypt(user.getPassword()));
+        if (authUser == null)
             throw new UserException("User Not Found!");
-        if(!authUser.getPassword().equals(user.getPassword()))
+        if (!authUser.getPassword().equals(user.getPassword()))
             throw new UserException("Wrong username or password");
         Bus bus = busDAO.getBusByDriverID(authUser.getUserID());
         authUser.setPassword(null);
@@ -164,26 +165,29 @@ public class UserService {
 
     public Boolean changePassword(ChangePassword changePassword) {
         User result = userDAO.getUserById(changePassword.getUser().getUserID());
+        changePassword.getUser().setPassword(Encryption.encrypt(changePassword.getUser().getPassword()));
         if (result == null) {
             throw new UserException("User Not Found!!");
         }
         if (!(result.getPassword().equals(changePassword.getUser().getPassword()))) {
             throw new UserException("Password does not right");
         }
-        result.setPassword(changePassword.getNewPassword());
+        result.setPassword(Encryption.encrypt(changePassword.getNewPassword()));
         if (userDAO.update(result) == 1) return true;
         return false;
     }
 
     public Boolean changeEmail(User user) {
-        User user1 = userDAO.getUserByEmail(user.getEmail());
-        if(user1 != null){
-            throw new UserException("This email already exist") ;
+        User user1 = userDAO.getUserById(user.getUserID());
+        user.setPassword(Encryption.encrypt(user.getPassword()));
+        if (userDAO.getUserByEmail(user.getEmail()) != null) {
+            throw new UserException("This email already exist");
         }
-         if (!(userDAO.getUserById(user.getUserID()).getPassword().equals(user.getPassword()))) {
-            throw new UserException("Email does not match!");
+        if (!(userDAO.getUserById(user.getUserID()).getPassword().equals(user.getPassword()))) {
+            throw new UserException("Incorrect Password!!");
         }
-        return userDAO.changeEmail(user) == Boolean.TRUE;
+        user1.setEmail(user.getEmail());
+        return userDAO.changeEmail(user1) == Boolean.TRUE;
     }
 
     public Schedule getSchedule(Integer scheduleId) {

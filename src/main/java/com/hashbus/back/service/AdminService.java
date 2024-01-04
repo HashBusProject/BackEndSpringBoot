@@ -127,6 +127,7 @@ public class AdminService {
         if (user1 == null) {
             throw new AdminException("User name not exist!");
         }
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (user.getPassword().equals(user1.getPassword())) {
             if (user1.getRole() == 4) {
                 return user1;

@@ -22,6 +22,7 @@ public class OrganizerService {
 
     public User login(User user) {
         User user1 = userDAO.getUserByUsername(user.getUsername());
+        user.setPassword(Encryption.encrypt(user.getPassword()));
         if (user1 == null) {
             throw new OrganizerExeption("Username name not exist!");
         } else {
@@ -63,6 +64,7 @@ public class OrganizerService {
         Journey journey1 = journeyDAO.getJourneyById(journey.getId());
         if (journey1 == null)
             throw new OrganizerExeption("this journey does not exist");
+        journeyDAO.deleteAllStopPointsByJourneyID(journey.getId());
         return journeyDAO.deleteJourney(journey);
     }
 

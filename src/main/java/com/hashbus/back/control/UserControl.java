@@ -40,8 +40,8 @@ public class UserControl {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/ChangePassword")
-    public ResponseEntity<User> changePassword(@RequestBody User user) {
+    @PutMapping("/ForgetPassword")
+    public ResponseEntity<User> forgetPassword(@RequestBody User user) {
         User result = userService.forgetPassword(user);
         return ResponseEntity.ok(result);
     }
@@ -138,6 +138,14 @@ public class UserControl {
     @GetMapping("/GetSchedule")
     public ResponseEntity<Schedule> getSchedule(@RequestParam Integer scheduleId){
         return ResponseEntity.ok(userService.getSchedule(scheduleId));
+    }
+
+    @PutMapping("/ChangePassword")
+    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePassword changePassword) {
+        if (userService.changePassword(changePassword)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
     }
 
 }
