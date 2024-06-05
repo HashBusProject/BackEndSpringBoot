@@ -1,17 +1,12 @@
 package com.hashbus.back.control;
 
-import com.google.gson.Gson;
-import com.hashbus.back.database.mappers.TicketMapper;
+import com.hashbus.back.exceptions.TripException;
 import com.hashbus.back.model.*;
 import com.hashbus.back.service.UserService;
-import jnr.ffi.annotations.In;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,9 +40,9 @@ public class UserControl {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/ChangePassword")
-    public ResponseEntity<User> changePassword(@RequestBody User user) {
-        User result = userService.changePassword(user);
+    @PutMapping("/ForgetPassword")
+    public ResponseEntity<User> forgetPassword(@RequestBody User user) {
+        User result = userService.forgetPassword(user);
         return ResponseEntity.ok(result);
     }
 
@@ -116,6 +111,41 @@ public class UserControl {
             @RequestBody Schedule schedule) {
         boolean x = userService.confirmRide(userId, journeyId, busId, schedule);
         return ResponseEntity.ok(x);
+    }
+
+    @PostMapping("/ReserveASite")
+    public ResponseEntity<Boolean> reserveASite(@RequestParam Integer scheduleID) {
+        try {
+            return ResponseEntity.ok(userService.reserveASite(scheduleID));
+        } catch (TripException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).body(false);
+        }
+    }
+
+    @PostMapping("/CancelReserve")
+    public ResponseEntity<Boolean> cancelReserve(@RequestParam Integer scheduleID) {
+        try {
+            return ResponseEntity.ok(userService.cancelASite(scheduleID));
+        } catch (TripException e) {
+            return ResponseEntity.badRequest().header("message", e.getMessage()).body(false);
+        }
+    }
+    @PutMapping("/ChangeEmail")
+    public ResponseEntity<Boolean> changeEmail(@RequestBody User user){
+        return ResponseEntity.ok(userService.changeEmail(user)) ;
+    }
+
+    @GetMapping("/GetSchedule")
+    public ResponseEntity<Schedule> getSchedule(@RequestParam Integer scheduleId){
+        return ResponseEntity.ok(userService.getSchedule(scheduleId));
+    }
+
+    @PutMapping("/ChangePassword")
+    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePassword changePassword) {
+        if (userService.changePassword(changePassword)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
     }
 
 }

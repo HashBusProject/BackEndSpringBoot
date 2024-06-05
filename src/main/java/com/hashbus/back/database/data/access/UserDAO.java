@@ -1,8 +1,10 @@
 package com.hashbus.back.database.data.access;
 
 import com.hashbus.back.database.mappers.UserMapper;
+import com.hashbus.back.model.ChangePassword;
 import com.hashbus.back.model.User;
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -82,19 +84,30 @@ public class UserDAO {
                 "update users set password = ? where username=?;",
                 user.getPassword(), user.getUsername());
     }
+
     public int editUser(User user) {
         return jdbcTemplate.update(
-        "update users set password = ? , email = ? , username = ? , name = ? where user_id=?;",
-                user.getPassword(), user.getEmail() , user.getUsername() , user.getName() , user.getUserID()) ;
+                "update users set  email = ? , username = ? , name = ? where user_id=?;",
+                user.getEmail(), user.getUsername(), user.getName(), user.getUserID());
     }
-    public int getNumberOfUserByRole(int role){
+
+    public int getNumberOfUserByRole(int role) {
         return jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM users WHERE rule_type_Id = ?",
                 new Object[]{role},
                 Integer.class
         );
     }
+
     public Integer getNumberOfUser() {
-        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class );
+        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
     }
+
+    public Boolean changeEmail(User user) {
+        return jdbcTemplate.update("update users set email = ? where username = ? ",
+                user.getEmail(),
+                user.getUsername()) > 0;
+    }
+
+
 }

@@ -21,6 +21,8 @@ public class BusMapper implements RowMapper<Bus> {
         Bus bus = new Bus();
         bus.setId(rs.getInt("bus_ID"));
         bus.setIsWorking(rs.getBoolean("working"));
+        bus.setX(rs.getDouble("x_point"));
+        bus.setY(rs.getDouble("y_point"));
         User driver = userDAO.getUserById(rs.getInt("Driver_id"));
         bus.setDriver(driver);
         return bus;
