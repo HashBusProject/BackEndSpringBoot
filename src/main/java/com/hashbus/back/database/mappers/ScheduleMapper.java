@@ -18,11 +18,16 @@ public class ScheduleMapper implements RowMapper<Schedule> {
     @Override
     public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
         Schedule schedule = new Schedule();
+        schedule.setScheduleId(rs.getInt("schedule_id"));
         schedule.setJourney(rs.getInt("journey_id"));
         schedule.setBus(rs.getInt("bus_id"));
         schedule.setTime(
                 Time.valueOf(rs.getString("time"))
         );
+        schedule.setNextPoint(rs.getInt("next_point_index"));
+        schedule.setPassengersNumber(rs.getInt("passengers_number"));
+        schedule.setDate(rs.getDate("date"));
+        schedule.setFinished(rs.getInt("finished") == 1);
         return schedule;
     }
 }

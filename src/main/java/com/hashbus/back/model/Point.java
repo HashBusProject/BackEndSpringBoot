@@ -14,6 +14,5 @@ public class Point {
     private String pointName;
     private Double x;
     private Double y;
-//    private HashSet<Journey> journeys;
     private HashSet<Integer> journeysID;
 }

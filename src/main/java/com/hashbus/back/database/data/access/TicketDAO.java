@@ -58,4 +58,8 @@ public class TicketDAO {
         return x;
     }
 
+    public Boolean deleteAllTickets(){
+        return jdbcTemplate.update("delete from tickets") > 0 ;
+    }
+
 }

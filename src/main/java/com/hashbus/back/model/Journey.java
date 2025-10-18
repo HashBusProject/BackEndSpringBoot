@@ -18,5 +18,5 @@ public class Journey {
     private Integer destinationPoint;
     private List<Integer> stopPoints;
     private Double price;
-    private HashSet<Schedule> journeys;
+    private List<Schedule> journeys;
 }
